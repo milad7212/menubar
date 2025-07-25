@@ -511,7 +511,7 @@ export default function HomePage() {
 
       {/* Item Detail Modal */}
       <Dialog open={!!selectedItem} onOpenChange={() => setSelectedItem(null)}>
-        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto bg-white/80 backdrop-blur-sm">
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto bg-white">
           {selectedItem && (
             <>
               <DialogHeader>
