@@ -306,7 +306,7 @@ export default function HomePage() {
                 <Button variant="outline" size="sm" className="relative bg-transparent">
                   <ShoppingCart className="h-5 w-5" />
                   {getTotalItems() > 0 && (
-                    <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                    <Badge className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 flex items-center justify-center text-sm bg-blue-500 text-white">
                       {getTotalItems()}
                     </Badge>
                   )}
@@ -439,7 +439,7 @@ export default function HomePage() {
                       <h3 className="font-bold text-lg leading-tight">{item.name}</h3>
                       <Button variant="ghost" size="sm" className="p-1 h-8 w-8" onClick={() => toggleLike(item.id)}>
                         <Heart
-                          className={`h-5 w-5 ${
+                          className={`h-6 w-6 ${
                             likedItems.includes(item.id) ? "fill-red-500 text-red-500" : "text-gray-400"
                           }`}
                         />
