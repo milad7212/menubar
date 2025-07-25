@@ -507,36 +507,36 @@ export default function MenuBuilderPage() {
     <div className="min-h-screen bg-gray-50" dir="rtl">
       {/* Header */}
       <header className="bg-white shadow-sm border-b sticky top-0 z-40">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center">
+            <div className="flex items-center gap-2">
+              <div className="w-9 h-9 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center">
                 <Coffee className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">سازنده منوی کافه</h1>
-                <p className="text-sm text-gray-600">منوی اختصاصی خود را بسازید</p>
+                <h1 className="text-lg font-bold text-gray-900">سازنده منو</h1>
+                <p className="text-xs text-gray-600 hidden sm:block">منوی اختصاصی خود را بسازید</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={() => window.open("/theme-preview", "_blank")}>
-                <Eye className="h-4 w-4 mr-2" />
-                پیش‌نمایش تم‌ها
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Button variant="outline" size="sm" onClick={() => setPreviewMode(true)} className="text-xs">
+                <Eye className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">پیش‌نمایش</span>
               </Button>
-              <Button variant="outline" onClick={() => setPreviewMode(true)}>
-                <Eye className="h-4 w-4 mr-2" />
-                پیش‌نمایش منو
+              <Button variant="outline" size="sm" onClick={handleSaveMenu} className="text-xs">
+                <Save className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">ذخیره</span>
               </Button>
-              <Button variant="outline" onClick={handleSaveMenu}>
-                <Save className="h-4 w-4 mr-2" />
-                ذخیره
-              </Button>
-              <Button onClick={handlePublishMenu} className="bg-gradient-to-r from-green-500 to-emerald-600">
-                انتشار منو
+              <Button
+                size="sm"
+                onClick={handlePublishMenu}
+                className="bg-gradient-to-r from-green-500 to-emerald-600 text-xs"
+              >
+                انتشار
               </Button>
               <Link href="/">
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="icon" className="w-8 h-8">
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
               </Link>
@@ -547,22 +547,22 @@ export default function MenuBuilderPage() {
 
       <div className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="info" className="flex items-center gap-2">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+            <TabsTrigger value="info" className="flex items-center gap-2 text-xs sm:text-sm">
               <Settings className="h-4 w-4" />
-              اطلاعات کافه
+              <span className="hidden sm:inline">اطلاعات کافه</span>
             </TabsTrigger>
-            <TabsTrigger value="design" className="flex items-center gap-2">
+            <TabsTrigger value="design" className="flex items-center gap-2 text-xs sm:text-sm">
               <Palette className="h-4 w-4" />
-              انتخاب تم
+              <span className="hidden sm:inline">انتخاب تم</span>
             </TabsTrigger>
-            <TabsTrigger value="categories" className="flex items-center gap-2">
+            <TabsTrigger value="categories" className="flex items-center gap-2 text-xs sm:text-sm">
               <Layout className="h-4 w-4" />
-              دسته‌بندی‌ها
+              <span className="hidden sm:inline">دسته‌بندی‌ها</span>
             </TabsTrigger>
-            <TabsTrigger value="items" className="flex items-center gap-2">
+            <TabsTrigger value="items" className="flex items-center gap-2 text-xs sm:text-sm">
               <Coffee className="h-4 w-4" />
-              آیتم‌های منو
+              <span className="hidden sm:inline">آیتم‌های منو</span>
             </TabsTrigger>
           </TabsList>
 
