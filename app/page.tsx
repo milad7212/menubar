@@ -312,7 +312,7 @@ export default function HomePage() {
                   )}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-full sm:max-w-md">
+              <SheetContent side="left" className="w-full sm:max-w-md bg-white/80 backdrop-blur-md">
                 <SheetHeader>
                   <SheetTitle>سبد خرید</SheetTitle>
                   <SheetDescription>{getTotalItems()} آیتم در سبد شما</SheetDescription>
