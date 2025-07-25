@@ -409,7 +409,7 @@ export default function HomePage() {
             <p className="text-gray-600">لطفاً کلمات کلیدی دیگری امتحان کنید یا فیلترها را تغییر دهید</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredItems.map((item) => (
               <Card
                 key={item.id}
