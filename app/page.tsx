@@ -460,6 +460,20 @@ export default function HomePage() {
                     </div>
 
                     <div className="flex items-center justify-between">
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => addToCart(item)}
+                          className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+                        >
+                          <Plus className="h-4 w-4 ml-1" />
+                          افزودن
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => setSelectedItem(item)}>
+                          جزئیات
+                        </Button>
+                      </div>
+
                       <div className="flex items-center gap-2">
                         {item.originalPrice > item.price && (
                           <span className="text-sm text-gray-400 line-through">
@@ -469,20 +483,6 @@ export default function HomePage() {
                         <span className="font-bold text-lg text-green-600">
                           {item.price.toLocaleString("fa-IR")} تومان
                         </span>
-                      </div>
-
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setSelectedItem(item)}>
-                          جزئیات
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => addToCart(item)}
-                          className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
-                        >
-                          <Plus className="h-4 w-4 ml-1" />
-                          افزودن
-                        </Button>
                       </div>
                     </div>
 
