@@ -471,12 +471,17 @@ export default function HomePage() {
                         <Button
                           size="sm"
                           onClick={() => addToCart(item)}
-                          className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+                          className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 transform transition-transform duration-200 active:scale-95"
                         >
                           <Plus className="h-4 w-4 ml-1" />
                           افزودن
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => setSelectedItem(item)}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSelectedItem(item)}
+                          className="transform transition-transform duration-200 active:scale-95"
+                        >
                           جزئیات
                         </Button>
                       </div>
