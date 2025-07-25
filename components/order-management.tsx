@@ -282,7 +282,7 @@ function OrderCard({
   }
 
   return (
-    <Card>
+    <Card className="text-right">
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start">
           <div>
@@ -308,10 +308,9 @@ function OrderCard({
           </div>
 
           <div className="flex justify-between items-center">
-            <span className="font-bold text-lg text-green-600">{order.total.toLocaleString("fa-IR")} تومان</span>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={() => onViewDetails(order)}>
-                <Eye className="h-4 w-4 mr-1" />
+                <Eye className="h-4 w-4 ml-1" />
                 جزئیات
               </Button>
 
@@ -321,7 +320,7 @@ function OrderCard({
                   onClick={() => onStatusChange(order.id, "preparing")}
                   className="bg-blue-500 hover:bg-blue-600"
                 >
-                  <Clock className="h-4 w-4 mr-1" />
+                  <Clock className="h-4 w-4 ml-1" />
                   شروع آماده‌سازی
                 </Button>
               )}
@@ -332,7 +331,7 @@ function OrderCard({
                   onClick={() => onStatusChange(order.id, "ready")}
                   className="bg-green-500 hover:bg-green-600"
                 >
-                  <CheckCircle className="h-4 w-4 mr-1" />
+                  <CheckCircle className="h-4 w-4 ml-1" />
                   آماده شد
                 </Button>
               )}
@@ -347,6 +346,7 @@ function OrderCard({
                 </Button>
               )}
             </div>
+            <span className="font-bold text-lg text-green-600">{order.total.toLocaleString("fa-IR")} تومان</span>
           </div>
         </div>
       </CardContent>

@@ -30,9 +30,10 @@ export function QRGenerator({ cafeInfo }: QRGeneratorProps) {
   const [copied, setCopied] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
-  // در پروژه واقعی از کتابخانه QR code استفاده می‌کنید
   const menuUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/customer-menu?theme=${cafeInfo.selectedTheme}`
-  const qrCodeUrl = `/placeholder.svg?height=${qrSize}&width=${qrSize}&text=QR+Code+Menu`
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
+    menuUrl,
+  )}&size=${qrSize}x${qrSize}`
 
   const copyToClipboard = async (text: string) => {
     try {

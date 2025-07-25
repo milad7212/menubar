@@ -30,14 +30,18 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <QRGenerator cafeInfo={cafeInfo} />
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className="hidden sm:flex">
+                <QRGenerator cafeInfo={cafeInfo} />
+              </div>
               <Link href="/menu-builder">
-                <Button variant="outline">ویرایش منو</Button>
+                <Button variant="outline" className="text-xs sm:text-sm">
+                  ویرایش منو
+                </Button>
               </Link>
               <Link href="/">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4" />
+                <Button variant="ghost" size="icon" className="w-8 h-8 sm:w-9 sm:h-9">
+                  <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               </Link>
             </div>
@@ -47,18 +51,18 @@ export default function AdminDashboard() {
 
       <div className="container mx-auto px-4 py-6">
         <Tabs defaultValue="orders" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3">
             <TabsTrigger value="orders" className="flex items-center gap-2">
               <ShoppingBag className="h-4 w-4" />
-              مدیریت سفارشات
+              <span className="hidden sm:inline">مدیریت سفارشات</span>
             </TabsTrigger>
             <TabsTrigger value="analytics" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
-              آمار و گزارشات
+              <span className="hidden sm:inline">آمار و گزارشات</span>
             </TabsTrigger>
             <TabsTrigger value="qr" className="flex items-center gap-2">
               <QrCode className="h-4 w-4" />
-              QR کد و اشتراک‌گذاری
+              <span className="hidden sm:inline">QR کد و اشتراک‌گذاری</span>
             </TabsTrigger>
           </TabsList>
 
