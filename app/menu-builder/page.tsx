@@ -545,30 +545,43 @@ export default function MenuBuilderPage() {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-            <TabsTrigger value="info" className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-2">
-              <Settings className="h-5 w-5" />
-              <span>اطلاعات کافه</span>
-            </TabsTrigger>
-            <TabsTrigger value="design" className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-2">
-              <Palette className="h-5 w-5" />
-              <span>انتخاب تم</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="categories"
-              className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-2"
-            >
-              <Layout className="h-5 w-5" />
-              <span>دسته‌بندی‌ها</span>
-            </TabsTrigger>
-            <TabsTrigger value="items" className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-2">
-              <Coffee className="h-5 w-5" />
-              <span>آیتم‌های منو</span>
-            </TabsTrigger>
-          </TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-grow">
+        <div className="bg-white border-b sticky top-[61px] z-30">
+          <div className="container mx-auto px-4">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+              <TabsTrigger
+                value="info"
+                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+              >
+                <Settings className="h-5 w-5" />
+                <span>اطلاعات کافه</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="design"
+                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+              >
+                <Palette className="h-5 w-5" />
+                <span>انتخاب تم</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="categories"
+                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+              >
+                <Layout className="h-5 w-5" />
+                <span>دسته‌بندی‌ها</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="items"
+                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+              >
+                <Coffee className="h-5 w-5" />
+                <span>آیتم‌های منو</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
+        </div>
 
+        <div className="container mx-auto px-4 py-6">
           {/* Cafe Info Tab */}
           <TabsContent value="info" className="space-y-6">
             <Card>
@@ -1078,8 +1091,8 @@ export default function MenuBuilderPage() {
               </CardContent>
             </Card>
           </TabsContent>
-        </Tabs>
-      </div>
+        </div>
+      </Tabs>
     </div>
   )
 }
