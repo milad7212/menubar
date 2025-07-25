@@ -409,17 +409,24 @@ export default function HomePage() {
             <p className="text-gray-600">لطفاً کلمات کلیدی دیگری امتحان کنید یا فیلترها را تغییر دهید</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredItems.map((item) => (
               <Card
                 key={item.id}
-                className="overflow-hidden hover:shadow-lg transition-all duration-300 border-0 shadow-md"
+                className="overflow-hidden rounded-2xl hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white"
               >
                 <div className="relative">
                   <div className="aspect-square relative">
-                    <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
+                    <Image
+                      src={item.image || "/placeholder.svg"}
+                      alt={item.name}
+                      fill
+                      className="object-cover rounded-t-2xl"
+                    />
                     {item.discount > 0 && (
-                      <Badge className="absolute top-2 right-2 bg-red-500">{item.discount}% تخفیف</Badge>
+                      <Badge className="absolute top-3 right-3 bg-red-500 text-white shadow-md">
+                        {item.discount}% تخفیف
+                      </Badge>
                     )}
                     {item.isPopular && <Badge className="absolute top-2 left-2 bg-orange-500">محبوب</Badge>}
                     {item.video && (
