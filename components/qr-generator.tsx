@@ -139,11 +139,11 @@ export function QRGenerator({ cafeInfo }: QRGeneratorProps) {
             </div>
           </TabsContent>
 
-          <TabsContent value="link" className="space-y-4">
+          <TabsContent value="link" className="space-y-4 text-right">
             <div className="space-y-2">
               <Label htmlFor="menu-url">لینک منوی دیجیتال</Label>
               <div className="flex gap-2">
-                <Input id="menu-url" value={menuUrl} readOnly />
+                <Input id="menu-url" value={menuUrl} readOnly dir="ltr" />
                 <Button variant="outline" size="sm" onClick={() => copyToClipboard(menuUrl)} className="px-3">
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 </Button>
@@ -152,11 +152,11 @@ export function QRGenerator({ cafeInfo }: QRGeneratorProps) {
 
             <div className="p-4 bg-blue-50 rounded-lg">
               <h4 className="font-medium text-blue-900 mb-2">نحوه استفاده:</h4>
-              <ul className="text-sm text-blue-800 space-y-1">
-                <li>• QR کد را روی میزها قرار دهید</li>
-                <li>• لینک را در شبکه‌های اجتماعی به اشتراک بگذارید</li>
-                <li>• در تابلوهای دیجیتال نمایش دهید</li>
-                <li>• در کارت‌های ویزیت چاپ کنید</li>
+              <ul className="text-sm text-blue-800 space-y-1 pr-4">
+                <li className="list-disc">QR کد را روی میزها قرار دهید</li>
+                <li className="list-disc">لینک را در شبکه‌های اجتماعی به اشتراک بگذارید</li>
+                <li className="list-disc">در تابلوهای دیجیتال نمایش دهید</li>
+                <li className="list-disc">در کارت‌های ویزیت چاپ کنید</li>
               </ul>
             </div>
           </TabsContent>
