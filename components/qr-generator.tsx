@@ -46,7 +46,6 @@ export function QRGenerator({ cafeInfo }: QRGeneratorProps) {
   }
 
   const downloadQR = () => {
-    // در پروژه واقعی QR code را دانلود می‌کنید
     const link = document.createElement("a")
     link.href = qrCodeUrl
     link.download = `${cafeInfo.name}-menu-qr.png`
@@ -77,7 +76,7 @@ export function QRGenerator({ cafeInfo }: QRGeneratorProps) {
           تولید QR کد
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md text-right">
         <DialogHeader>
           <DialogTitle>QR کد منوی دیجیتال</DialogTitle>
           <DialogDescription>QR کد منوی کافه خود را تولید و اشتراک‌گذاری کنید</DialogDescription>
@@ -113,11 +112,11 @@ export function QRGenerator({ cafeInfo }: QRGeneratorProps) {
                 <div className="w-full space-y-2">
                   <div className="flex gap-2">
                     <Button onClick={downloadQR} className="flex-1">
-                      <Download className="h-4 w-4 mr-2" />
+                      <Download className="h-4 w-4 ml-2" />
                       دانلود
                     </Button>
                     <Button onClick={shareMenu} variant="outline" className="flex-1 bg-transparent">
-                      <Share2 className="h-4 w-4 mr-2" />
+                      <Share2 className="h-4 w-4 ml-2" />
                       اشتراک
                     </Button>
                   </div>
@@ -144,7 +143,7 @@ export function QRGenerator({ cafeInfo }: QRGeneratorProps) {
             <div className="space-y-2">
               <Label htmlFor="menu-url">لینک منوی دیجیتال</Label>
               <div className="flex gap-2">
-                <Input id="menu-url" value={menuUrl} readOnly className="text-left" />
+                <Input id="menu-url" value={menuUrl} readOnly />
                 <Button variant="outline" size="sm" onClick={() => copyToClipboard(menuUrl)} className="px-3">
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 </Button>

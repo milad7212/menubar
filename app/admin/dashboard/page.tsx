@@ -31,17 +31,11 @@ export default function AdminDashboard() {
             </div>
 
             <div className="flex items-center gap-2 sm:gap-4">
-              <div className="sm:hidden">
-                <QRGenerator cafeInfo={cafeInfo} />
-              </div>
-              <div className="hidden sm:flex">
-                <QRGenerator cafeInfo={cafeInfo} />
-                <Link href="/menu-builder">
-                  <Button variant="outline" className="text-xs sm:text-sm">
-                    ویرایش منو
-                  </Button>
-                </Link>
-              </div>
+              <Link href="/menu-builder">
+                <Button variant="outline" className="text-xs sm:text-sm">
+                  ویرایش منو
+                </Button>
+              </Link>
               <Link href="/">
                 <Button variant="ghost" size="icon" className="w-8 h-8 sm:w-9 sm:h-9">
                   <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
