@@ -1,13 +1,17 @@
 'use client';
-import Layout from '../../components/Layout';
+import Layout from '../../../components/Layout';
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import withAuth from '../../hocs/withAuth';
+import withAuth from '../../../hocs/withAuth';
 
 const EditItemPage = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
+  const [audioUrl, setAudioUrl] = useState('');
   const { id } = useParams();
 
   useEffect(() => {
@@ -19,6 +23,10 @@ const EditItemPage = () => {
           setName(item.name);
           setPrice(item.price);
           setDescription(item.description);
+          setCategory(item.category);
+          setImageUrl(item.imageUrl);
+          setVideoUrl(item.videoUrl);
+          setAudioUrl(item.audioUrl);
         }
       };
       fetchItem();
@@ -33,7 +41,15 @@ const EditItemPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, price: parseFloat(price), description }),
+        body: JSON.stringify({
+          name,
+          price: parseFloat(price),
+          description,
+          category,
+          imageUrl,
+          videoUrl,
+          audioUrl,
+        }),
       });
       if (res.ok) {
         alert('آیتم با موفقیت ویرایش شد');
@@ -77,7 +93,7 @@ const EditItemPage = () => {
             required
           />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <label htmlFor="description" className="block text-sm font-bold mb-2">
             توضیحات
           </label>
@@ -85,6 +101,54 @@ const EditItemPage = () => {
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="category" className="block text-sm font-bold mb-2">
+            دسته بندی
+          </label>
+          <input
+            type="text"
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="imageUrl" className="block text-sm font-bold mb-2">
+            آدرس عکس
+          </label>
+          <input
+            type="text"
+            id="imageUrl"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="videoUrl" className="block text-sm font-bold mb-2">
+            آدرس ویدیو
+          </label>
+          <input
+            type="text"
+            id="videoUrl"
+            value={videoUrl}
+            onChange={(e) => setVideoUrl(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="audioUrl" className="block text-sm font-bold mb-2">
+            آدرس صوت
+          </label>
+          <input
+            type="text"
+            id="audioUrl"
+            value={audioUrl}
+            onChange={(e) => setAudioUrl(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>

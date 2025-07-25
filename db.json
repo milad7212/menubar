@@ -1,8 +1,45 @@
 {
   "users": [],
   "menuItems": [
-    { "id": 1, "name": "اسپرسو", "description": "یک شات اسپرسو", "price": 20000 },
-    { "id": 2, "name": "کاپوچینو", "description": "اسپرسو با شیر فوم گرفته شده", "price": 25000 },
-    { "id": 3, "name": "لاته", "description": "اسپرسو با شیر بخار داده شده", "price": 25000 }
+    {
+      "id": 1,
+      "name": "اسپرسو",
+      "description": "یک شات اسپرسو",
+      "price": 20000,
+      "category": "نوشیدنی های گرم",
+      "imageUrl": "https://via.placeholder.com/300x200.png?text=Espresso",
+      "videoUrl": "",
+      "audioUrl": ""
+    },
+    {
+      "id": 2,
+      "name": "کاپوچینو",
+      "description": "اسپرسو با شیر فوم گرفته شده",
+      "price": 25000,
+      "category": "نوشیدنی های گرم",
+      "imageUrl": "https://via.placeholder.com/300x200.png?text=Cappuccino",
+      "videoUrl": "",
+      "audioUrl": ""
+    },
+    {
+      "id": 3,
+      "name": "لاته",
+      "description": "اسپرسو با شیر بخار داده شده",
+      "price": 25000,
+      "category": "نوشیدنی های گرم",
+      "imageUrl": "https://via.placeholder.com/300x200.png?text=Latte",
+      "videoUrl": "",
+      "audioUrl": ""
+    },
+    {
+      "id": 4,
+      "name": "کیک شکلاتی",
+      "description": "کیک شکلاتی غنی و خوشمزه",
+      "price": 30000,
+      "category": "کیک و دسر",
+      "imageUrl": "https://via.placeholder.com/300x200.png?text=Chocolate+Cake",
+      "videoUrl": "",
+      "audioUrl": ""
+    }
   ]
 }
