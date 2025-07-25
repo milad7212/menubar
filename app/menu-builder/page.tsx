@@ -548,21 +548,24 @@ export default function MenuBuilderPage() {
       <div className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-            <TabsTrigger value="info" className="flex items-center gap-2 text-xs sm:text-sm">
-              <Settings className="h-4 w-4" />
-              <span className="hidden sm:inline">اطلاعات کافه</span>
+            <TabsTrigger value="info" className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-2">
+              <Settings className="h-5 w-5" />
+              <span>اطلاعات کافه</span>
             </TabsTrigger>
-            <TabsTrigger value="design" className="flex items-center gap-2 text-xs sm:text-sm">
-              <Palette className="h-4 w-4" />
-              <span className="hidden sm:inline">انتخاب تم</span>
+            <TabsTrigger value="design" className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-2">
+              <Palette className="h-5 w-5" />
+              <span>انتخاب تم</span>
             </TabsTrigger>
-            <TabsTrigger value="categories" className="flex items-center gap-2 text-xs sm:text-sm">
-              <Layout className="h-4 w-4" />
-              <span className="hidden sm:inline">دسته‌بندی‌ها</span>
+            <TabsTrigger
+              value="categories"
+              className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-2"
+            >
+              <Layout className="h-5 w-5" />
+              <span>دسته‌بندی‌ها</span>
             </TabsTrigger>
-            <TabsTrigger value="items" className="flex items-center gap-2 text-xs sm:text-sm">
-              <Coffee className="h-4 w-4" />
-              <span className="hidden sm:inline">آیتم‌های منو</span>
+            <TabsTrigger value="items" className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-2">
+              <Coffee className="h-5 w-5" />
+              <span>آیتم‌های منو</span>
             </TabsTrigger>
           </TabsList>
 
