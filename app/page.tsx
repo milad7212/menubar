@@ -39,7 +39,7 @@ const menuItems = [
     originalPrice: 55000,
     category: "نوشیدنی گرم",
     categoryId: 1,
-    image: "/placeholder.svg?height=300&width=300",
+    image: "https://images.unsplash.com/photo-1511920183359-2b31032d1e63?q=80&w=300&h=300&fit=crop",
     video: null,
     rating: 4.9,
     reviewCount: 234,
@@ -61,7 +61,7 @@ const menuItems = [
     originalPrice: 75000,
     category: "نوشیدنی گرم",
     categoryId: 1,
-    image: "/placeholder.svg?height=300&width=300",
+    image: "https://images.unsplash.com/photo-1557432220-934a47534c87?q=80&w=300&h=300&fit=crop",
     video: "/placeholder.mp4",
     rating: 4.7,
     reviewCount: 189,
@@ -83,7 +83,7 @@ const menuItems = [
     originalPrice: 65000,
     category: "نوشیدنی سرد",
     categoryId: 2,
-    image: "/placeholder.svg?height=300&width=300",
+    image: "https://images.unsplash.com/photo-1551030173-1a2a4a4a4a9c?q=80&w=300&h=300&fit=crop",
     video: null,
     rating: 4.6,
     reviewCount: 145,
@@ -511,7 +511,7 @@ export default function HomePage() {
 
       {/* Item Detail Modal */}
       <Dialog open={!!selectedItem} onOpenChange={() => setSelectedItem(null)}>
-        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto bg-white/80 backdrop-blur-sm">
           {selectedItem && (
             <>
               <DialogHeader>
