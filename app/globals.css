@@ -1,8 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
+/* @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -47,32 +45,33 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
-}
+} */
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
-}
+} */
 
 /* RTL Support */
-[dir="rtl"] {
+/* [dir="rtl"] {
   text-align: right;
-}
+} */
 
-[dir="rtl"] .flex {
+/* [dir="rtl"] .flex {
   flex-direction: row-reverse;
-}
+} */
 
-[dir="rtl"] .grid {
+/* [dir="rtl"] .grid {
   direction: rtl;
-}
+} */
 
 /* 3D Luxury Theme Styles */
-@layer components {
+/* @layer components {
   .theme-3d-luxury {
     background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
     min-height: 100vh;
@@ -119,8 +118,7 @@
 
   .card-3d:hover {
     transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0
-      rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
   .card-3d .card-content {
@@ -133,13 +131,16 @@
   }
 
   @keyframes float {
+
     0%,
     100% {
       transform: translateY(0px) rotate(0deg);
     }
+
     33% {
       transform: translateY(-10px) rotate(1deg);
     }
+
     66% {
       transform: translateY(-5px) rotate(-1deg);
     }
@@ -178,14 +179,14 @@
     0% {
       background-position: -200% -200%;
     }
+
     100% {
       background-position: 200% 200%;
     }
   }
 
   .neon-glow {
-    box-shadow: 0 0 5px rgba(99, 102, 241, 0.5), 0 0 10px rgba(99, 102, 241, 0.3), 0 0 15px rgba(99, 102, 241, 0.2), 0 0
-      20px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 5px rgba(99, 102, 241, 0.5), 0 0 10px rgba(99, 102, 241, 0.3), 0 0 15px rgba(99, 102, 241, 0.2), 0 0 20px rgba(99, 102, 241, 0.1);
   }
 
   .glass-morphism {
@@ -217,8 +218,9 @@
     from {
       box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
     }
+
     to {
       box-shadow: 0 0 30px rgba(99, 102, 241, 0.8);
     }
   }
-}
+} */
