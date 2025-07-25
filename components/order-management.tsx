@@ -308,6 +308,7 @@ function OrderCard({
           </div>
 
           <div className="flex justify-between items-center">
+            <span className="font-bold text-lg text-green-600">{order.total.toLocaleString("fa-IR")} تومان</span>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={() => onViewDetails(order)}>
                 <Eye className="h-4 w-4 ml-1" />
@@ -346,7 +347,6 @@ function OrderCard({
                 </Button>
               )}
             </div>
-            <span className="font-bold text-lg text-green-600">{order.total.toLocaleString("fa-IR")} تومان</span>
           </div>
         </div>
       </CardContent>
