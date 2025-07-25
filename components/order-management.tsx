@@ -121,14 +121,6 @@ export function OrderManagement() {
       </div>
 
       <Tabs defaultValue="all" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="all">همه ({orders.length})</TabsTrigger>
-          <TabsTrigger value="pending">در انتظار ({getOrdersByStatus("pending").length})</TabsTrigger>
-          <TabsTrigger value="preparing">در حال آماده‌سازی ({getOrdersByStatus("preparing").length})</TabsTrigger>
-          <TabsTrigger value="ready">آماده ({getOrdersByStatus("ready").length})</TabsTrigger>
-          <TabsTrigger value="delivered">تحویل شده ({getOrdersByStatus("delivered").length})</TabsTrigger>
-        </TabsList>
-
         <TabsContent value="all" className="space-y-4">
           {orders.map((order) => (
             <OrderCard

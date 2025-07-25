@@ -54,21 +54,6 @@ export default function AdminDashboard() {
 
       <div className="container mx-auto px-4 py-6">
         <Tabs defaultValue="orders" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3">
-            <TabsTrigger value="orders" className="flex items-center gap-2">
-              <ShoppingBag className="h-4 w-4" />
-              <span className="hidden sm:inline">مدیریت سفارشات</span>
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4" />
-              <span className="hidden sm:inline">آمار و گزارشات</span>
-            </TabsTrigger>
-            <TabsTrigger value="qr" className="flex items-center gap-2">
-              <QrCode className="h-4 w-4" />
-              <span className="hidden sm:inline">QR کد و اشتراک‌گذاری</span>
-            </TabsTrigger>
-          </TabsList>
-
           <TabsContent value="orders">
             <OrderManagement />
           </TabsContent>
@@ -112,6 +97,24 @@ export default function AdminDashboard() {
             </div>
           </TabsContent>
         </Tabs>
+      </div>
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t">
+        <div className="container mx-auto px-4 py-2">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="orders" className="flex items-center gap-2">
+              <ShoppingBag className="h-4 w-4" />
+              <span className="hidden sm:inline">مدیریت سفارشات</span>
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              <span className="hidden sm:inline">آمار و گزارشات</span>
+            </TabsTrigger>
+            <TabsTrigger value="qr" className="flex items-center gap-2">
+              <QrCode className="h-4 w-4" />
+              <span className="hidden sm:inline">QR کد و اشتراک‌گذاری</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
       </div>
     </div>
   )
