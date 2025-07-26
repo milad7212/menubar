@@ -384,7 +384,7 @@ export default function HomePage() {
       {/* Categories */}
       <div className="sticky top-[73px] z-40 bg-white/95 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 py-3">
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2 overflow-x-auto pb-2 -mb-2 scrollbar-hide">
             {categoryList.map((category) => (
               <Button
                 key={category}
