@@ -1,23 +1,17 @@
-"use client";
-import {
-  Coffee,
-  ArrowLeft,
-  BarChart3,
-  ShoppingBag,
-  QrCode,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Link from "next/link";
-import { OrderManagement } from "@/components/order-management";
-import { AnalyticsDashboard } from "@/components/analytics-dashboard";
-import { QRGenerator } from "@/components/qr-generator";
+"use client"
+import { Coffee, ArrowLeft, BarChart3, ShoppingBag, QrCode } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Link from "next/link"
+import { OrderManagement } from "@/components/order-management"
+import { AnalyticsDashboard } from "@/components/analytics-dashboard"
+import { QRGenerator } from "@/components/qr-generator"
 
 const cafeInfo = {
   name: "کافه آرامش",
   description: "بهترین قهوه و غذاهای خوشمزه در شهر",
   selectedTheme: "classic",
-};
+}
 
 export default function AdminDashboard() {
   return (
@@ -31,9 +25,7 @@ export default function AdminDashboard() {
                 <Coffee className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">
-                  داشبورد مدیریت
-                </h1>
+                <h1 className="text-xl font-bold text-gray-900">داشبورد مدیریت</h1>
                 <p className="text-sm text-gray-600">مدیریت کامل کافه</p>
               </div>
             </div>
@@ -45,11 +37,7 @@ export default function AdminDashboard() {
                 </Button>
               </Link>
               <Link href="/">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-8 h-8 sm:w-9 sm:h-9"
-                >
+                <Button variant="ghost" size="icon" className="w-8 h-8 sm:w-9 sm:h-9">
                   <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               </Link>
@@ -71,12 +59,8 @@ export default function AdminDashboard() {
           <TabsContent value="qr">
             <div className="max-w-2xl mx-auto">
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold mb-2">
-                  QR کد و اشتراک‌گذاری منو
-                </h2>
-                <p className="text-gray-600">
-                  منوی دیجیتال خود را با مشتریان به اشتراک بگذارید
-                </p>
+                <h2 className="text-2xl font-bold mb-2">QR کد و اشتراک‌گذاری منو</h2>
+                <p className="text-gray-600">منوی دیجیتال خود را با مشتریان به اشتراک بگذارید</p>
               </div>
 
               <div className="flex justify-center">
@@ -84,11 +68,9 @@ export default function AdminDashboard() {
               </div>
 
               <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-6 bg-blue-50 rounded-lg ">
-                  <h3 className="font-semibold text-blue-900 mb-3 text-right">
-                    مزایای منوی دیجیتال
-                  </h3>
-                  <ul className="text-sm text-blue-800 space-y-2 text-right">
+                <div className="p-6 bg-blue-50 rounded-lg">
+                  <h3 className="font-semibold text-blue-900 mb-3">مزایای منوی دیجیتال</h3>
+                  <ul className="text-sm text-blue-800 space-y-2">
                     <li>• کاهش هزینه چاپ منو</li>
                     <li>• بروزرسانی آسان قیمت‌ها</li>
                     <li>• تجربه بهتر مشتری</li>
@@ -96,11 +78,9 @@ export default function AdminDashboard() {
                   </ul>
                 </div>
 
-                <div className="p-6 bg-green-50 rounded-lg text-right">
-                  <h3 className="font-semibold text-green-900 mb-3">
-                    نحوه استفاده
-                  </h3>
-                  <ul className="text-sm text-green-800 space-y-2 text-right">
+                <div className="p-6 bg-green-50 rounded-lg">
+                  <h3 className="font-semibold text-green-900 mb-3">نحوه استفاده</h3>
+                  <ul className="text-sm text-green-800 space-y-2">
                     <li>• QR کد را چاپ کنید</li>
                     <li>• روی میزها قرار دهید</li>
                     <li>• مشتریان با موبایل اسکن کنند</li>
@@ -118,10 +98,7 @@ export default function AdminDashboard() {
                 <ShoppingBag className="h-4 w-4" />
                 <span className="hidden sm:inline">مدیریت سفارشات</span>
               </TabsTrigger>
-              <TabsTrigger
-                value="analytics"
-                className="flex items-center gap-2"
-              >
+              <TabsTrigger value="analytics" className="flex items-center gap-2">
                 <BarChart3 className="h-4 w-4" />
                 <span className="hidden sm:inline">آمار و گزارشات</span>
               </TabsTrigger>
@@ -134,5 +111,5 @@ export default function AdminDashboard() {
         </div>
       </Tabs>
     </div>
-  );
+  )
 }
