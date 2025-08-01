@@ -286,18 +286,18 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50" dir="rtl">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center">
-                <Coffee className="h-6 w-6 text-white" />
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center">
+                <Coffee className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">{cafeInfo.name}</h1>
-                <div className="flex items-center gap-1 text-sm text-gray-600">
-                  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                <h1 className="text-lg font-bold text-gray-900">{cafeInfo.name}</h1>
+                <div className="flex items-center gap-1 text-xs text-gray-600">
+                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
                   <span>{cafeInfo.rating}</span>
-                  <span>({cafeInfo.reviewCount.toLocaleString("fa-IR")} نظر)</span>
+                  <span className="hidden sm:inline">({cafeInfo.reviewCount.toLocaleString("fa-IR")} نظر)</span>
                 </div>
               </div>
             </div>

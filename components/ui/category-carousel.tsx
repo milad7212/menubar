@@ -25,14 +25,14 @@ export function CategoryCarousel({ children }: CategoryCarouselProps) {
   }, [emblaApi])
 
   return (
-    <div className="relative">
-      <div className="embla" ref={emblaRef}>
-        <div className="embla__container flex gap-2">{children}</div>
+    <div className="relative -mx-4 px-4">
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex gap-2">{children}</div>
       </div>
       <Button
         variant="outline"
         size="icon"
-        className="absolute -left-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm"
+        className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm shadow-md hidden sm:flex"
         onClick={scrollPrev}
       >
         <ArrowRight className="h-4 w-4" />
@@ -40,7 +40,7 @@ export function CategoryCarousel({ children }: CategoryCarouselProps) {
       <Button
         variant="outline"
         size="icon"
-        className="absolute -right-4 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm"
+        className="absolute right-0 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm shadow-md hidden sm:flex"
         onClick={scrollNext}
       >
         <ArrowLeft className="h-4 w-4" />
