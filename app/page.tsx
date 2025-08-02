@@ -50,7 +50,7 @@ export default function LandingPage() {
             </div>
             <div className="mt-12">
               <Image
-                src="/placeholder.svg?width=800&height=450&text=Dashboard+Preview"
+                src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&h=450&fit=crop"
                 alt="پیش‌نمایش داشبورد"
                 width={800}
                 height={450}
@@ -115,7 +115,7 @@ export default function LandingPage() {
               <div className="bg-white p-6 rounded-lg shadow-sm">
                 <div className="flex items-center mb-4">
                   <Image
-                    src="/placeholder-user.jpg"
+                    src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=48&h=48&fit=crop"
                     alt="کاربر"
                     width={48}
                     height={48}
@@ -139,7 +139,7 @@ export default function LandingPage() {
               <div className="bg-white p-6 rounded-lg shadow-sm">
                 <div className="flex items-center mb-4">
                   <Image
-                    src="/placeholder-user.jpg"
+                    src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=48&h=48&fit=crop"
                     alt="کاربر"
                     width={48}
                     height={48}
