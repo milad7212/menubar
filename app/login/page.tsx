@@ -28,7 +28,7 @@ export default function LoginPage() {
               <div className="flex items-center">
                 <Label htmlFor="password">رمز عبور</Label>
                 <Link href="#" className="mr-auto inline-block text-sm underline">
-                  فراموشی رمز؟
+                  فراموشی رمز عبور؟
                 </Link>
               </div>
               <Input id="password" type="password" required />

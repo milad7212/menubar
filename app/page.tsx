@@ -44,7 +44,8 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link href="/signup">
                 <Button size="lg">
-                  رایگان شروع کنید <ArrowLeft className="h-5 w-5 mr-2" />
+                  رایگان شروع کنید
+                  <ArrowLeft className="h-5 w-5 mr-2" />
                 </Button>
               </Link>
               <Link href="#features">
