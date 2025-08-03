@@ -1,9 +1,13 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { Vazirmatn } from "next/font/google"
 import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"] })
+const vazirmatn = Vazirmatn({
+  subsets: ["arabic"],
+  display: "swap",
+})
 
 export const metadata: Metadata = {
   title: "سیستم مدیریت منوی کافه",
@@ -18,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className={inter.className}>{children}</body>
+      <body className={vazirmatn.className}>{children}</body>
     </html>
   )
 }
