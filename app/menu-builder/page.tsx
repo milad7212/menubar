@@ -585,35 +585,33 @@ export default function MenuBuilderPage() {
           {/* Cafe Info Tab */}
           <TabsContent value="info" className="space-y-6">
             <Card>
-              <CardHeader>
+              <CardHeader className="text-right">
                 <CardTitle>اطلاعات پایه کافه</CardTitle>
                 <CardDescription>اطلاعات اصلی کافه خود را وارد کنید</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                  <div className="space-y-2 text-right">
                     <Label htmlFor="cafe-name">نام کافه *</Label>
                     <Input
                       id="cafe-name"
                       value={cafeInfo.name}
                       onChange={(e) => setCafeInfo({ ...cafeInfo, name: e.target.value })}
                       placeholder="نام کافه شما"
-                      className="text-right"
                     />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2 text-right">
                     <Label htmlFor="cafe-phone">شماره تماس</Label>
                     <Input
                       id="cafe-phone"
                       value={cafeInfo.phone}
                       onChange={(e) => setCafeInfo({ ...cafeInfo, phone: e.target.value })}
                       placeholder="۰۲۱-۱۲۳۴۵۶۷۸"
-                      className="text-right"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 text-right">
                   <Label htmlFor="cafe-description">توضیحات کافه</Label>
                   <Textarea
                     id="cafe-description"
@@ -621,40 +619,37 @@ export default function MenuBuilderPage() {
                     onChange={(e) => setCafeInfo({ ...cafeInfo, description: e.target.value })}
                     placeholder="توضیح کوتاهی از کافه شما"
                     rows={3}
-                    className="text-right"
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 text-right">
                   <Label htmlFor="cafe-address">آدرس کافه</Label>
                   <Input
                     id="cafe-address"
                     value={cafeInfo.address}
                     onChange={(e) => setCafeInfo({ ...cafeInfo, address: e.target.value })}
                     placeholder="آدرس کامل کافه"
-                    className="text-right"
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 text-right">
                   <Label htmlFor="cafe-hours">ساعات کاری</Label>
                   <Input
                     id="cafe-hours"
                     value={cafeInfo.hours}
                     onChange={(e) => setCafeInfo({ ...cafeInfo, hours: e.target.value })}
                     placeholder="۸:۰۰ - ۲۳:۰۰"
-                    className="text-right"
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 text-right">
                   <Label htmlFor="cafe-logo">لوگوی کافه (لینک تصویر)</Label>
                   <Input
                     id="cafe-logo"
                     value={cafeInfo.logo}
                     onChange={(e) => setCafeInfo({ ...cafeInfo, logo: e.target.value })}
                     placeholder="https://example.com/logo.png"
-                    className="text-left"
+                    dir="ltr"
                   />
                 </div>
               </CardContent>
