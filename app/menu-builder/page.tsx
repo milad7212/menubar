@@ -591,7 +591,7 @@ export default function MenuBuilderPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2 text-right">
+                  <div className="space-y-2 text-right md:order-last">
                     <Label htmlFor="cafe-name">نام کافه *</Label>
                     <Input
                       id="cafe-name"
