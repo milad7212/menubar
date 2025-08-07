@@ -35,7 +35,7 @@ export function CategoriesTab({
                 افزودن دسته‌بندی
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-background">
               <DialogHeader>
                 <DialogTitle>{editingCategory ? "ویرایش دسته‌بندی" : "افزودن دسته‌بندی جدید"}</DialogTitle>
                 <DialogDescription>اطلاعات دسته‌بندی را وارد کنید</DialogDescription>
