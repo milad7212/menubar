@@ -37,53 +37,69 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Link from "next/link"
 import Image from "next/image"
 
-// Initial data
-const initialCafeInfo = {
-  name: "کافه من",
-  description: "بهترین قهوه و غذاهای خوشمزه",
-  address: "آدرس کافه شما",
-  phone: "شماره تماس",
-  hours: "ساعات کاری",
-  logo: "",
-  selectedTheme: "classic", // Theme for customer display
+// New data structure for multiple menus
+const initialCafeData = {
+  info: {
+    name: "کافه من",
+    description: "بهترین قهوه و غذاهای خوشمزه",
+    address: "آدرس کافه شما",
+    phone: "شماره تماس",
+    logo: "",
+    selectedTheme: "modern-dark",
+  },
+  menus: [
+    {
+      id: 1,
+      name: "منوی اصلی",
+      timeSlots: [
+        { day: "all", from: "08:00", to: "23:00" },
+      ],
+      categories: [
+        {
+          id: 101,
+          name: "نوشیدنی‌های گرم",
+          description: "قهوه‌ها و نوشیدنی‌های گرم",
+          icon: "☕",
+          order: 1,
+          isVisible: true,
+          items: [
+            {
+              id: 1001,
+              name: "اسپرسو",
+              description: "قهوه خالص و قوی",
+              price: 45000,
+              originalPrice: 0,
+              image: "",
+              isAvailable: true,
+              isPopular: false,
+              preparationTime: "۲-۳ دقیقه",
+              calories: 5,
+              ingredients: ["قهوه آرابیکا", "آب خالص"],
+              order: 1,
+            },
+          ],
+        },
+        {
+          id: 102,
+          name: "نوشیدنی‌های سرد",
+          description: "نوشیدنی‌های خنک و منعش",
+          icon: "🧊",
+          order: 2,
+          isVisible: true,
+          items: [],
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: "منوی صبحانه",
+      timeSlots: [
+        { day: "all", from: "08:00", to: "12:00" },
+      ],
+      categories: [],
+    },
+  ],
 }
-
-const initialCategories = [
-  {
-    id: 1,
-    name: "نوشیدنی‌های گرم",
-    description: "قهوه‌ها و نوشیدنی‌های گرم",
-    icon: "☕",
-    order: 1,
-    isVisible: true,
-  },
-  {
-    id: 2,
-    name: "نوشیدنی‌های سرد",
-    description: "نوشیدنی‌های خنک و منعش",
-    icon: "🧊",
-    order: 2,
-    isVisible: true,
-  },
-]
-
-const initialMenuItems = [
-  {
-    id: 1,
-    categoryId: 1,
-    name: "اسپرسو",
-    description: "قهوه خالص و قوی",
-    price: 45000,
-    originalPrice: 55000,
-    image: "/placeholder.svg?height=300&width=300",
-    isAvailable: true,
-    isPopular: false,
-    preparationTime: "۲-۳ دقیقه",
-    calories: 5,
-    ingredients: ["قهوه آرابیکا", "آب خالص"],
-    order: 1,
-  },
-]
 
 const customerThemes = [
   {
