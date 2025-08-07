@@ -666,6 +666,12 @@ export default function MenuBuilderPage() {
                   />
                 </div>
               </CardContent>
+              <DialogFooter className="px-6 pb-6">
+                <Button onClick={handleSaveMenu}>
+                  <Save className="h-4 w-4 ml-2" />
+                  تأیید و ذخیره اطلاعات
+                </Button>
+              </DialogFooter>
             </Card>
           </TabsContent>
 
