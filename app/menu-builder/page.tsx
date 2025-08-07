@@ -196,9 +196,7 @@ const customerThemes = [
 ]
 
 export default function MenuBuilderPage() {
-  const [cafeInfo, setCafeInfo] = useState(initialCafeInfo)
-  const [categories, setCategories] = useState(initialCategories)
-  const [menuItems, setMenuItems] = useState(initialMenuItems)
+  const [cafeData, setCafeData] = useState(initialCafeData)
   const [activeTab, setActiveTab] = useState("info")
   const [previewMode, setPreviewMode] = useState(false)
 
