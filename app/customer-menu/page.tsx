@@ -509,29 +509,28 @@ export default function CustomerMenuPage() {
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      {item.originalPrice > item.price && (
-                        <span className={`text-sm line-through ${theme.colors.text} opacity-50`}>
-                          {item.originalPrice.toLocaleString("fa-IR")}
-                        </span>
-                      )}
-                      <span className="font-bold text-lg" style={{ color: theme.colors.primary }}>
-                        {item.price.toLocaleString("fa-IR")} تومان
-                      </span>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => setSelectedItem(item)}>
-                        جزئیات
-                      </Button>
                       <Button
                         size="sm"
                         onClick={() => addToCart(item)}
                         style={{ backgroundColor: theme.colors.primary }}
                         className="hover:opacity-90"
                       >
-                        <Plus className="h-4 w-4 mr-1" />
+                        <Plus className="h-4 w-4 ml-1" />
                         افزودن
                       </Button>
+                      <Button variant="outline" size="sm" onClick={() => setSelectedItem(item)}>
+                        جزئیات
+                      </Button>
+                    </div>
+                    <div className="text-left">
+                      {item.originalPrice > item.price && (
+                        <span className={`text-sm line-through ${theme.colors.text} opacity-50`}>
+                          {item.originalPrice.toLocaleString("fa-IR")}
+                        </span>
+                      )}
+                      <span className="font-bold text-lg block" style={{ color: theme.colors.primary }}>
+                        {item.price.toLocaleString("fa-IR")} تومان
+                      </span>
                     </div>
                   </div>
 

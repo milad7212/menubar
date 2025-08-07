@@ -613,6 +613,7 @@ export default function MenuBuilderPage() {
                       value={cafeData.info.name}
                       onChange={(e) => setCafeData({ ...cafeData, info: { ...cafeData.info, name: e.target.value } })}
                       placeholder="نام کافه شما"
+                      className="text-right"
                     />
                   </div>
                   <div className="space-y-2 text-right">
@@ -622,6 +623,7 @@ export default function MenuBuilderPage() {
                       value={cafeData.info.phone}
                       onChange={(e) => setCafeData({ ...cafeData, info: { ...cafeData.info, phone: e.target.value } })}
                       placeholder="۰۲۱-۱۲۳۴۵۶۷۸"
+                      className="text-right"
                     />
                   </div>
                 </div>
@@ -636,6 +638,7 @@ export default function MenuBuilderPage() {
                     }
                     placeholder="توضیح کوتاهی از کافه شما"
                     rows={3}
+                    className="text-right"
                   />
                 </div>
 
@@ -648,6 +651,7 @@ export default function MenuBuilderPage() {
                       setCafeData({ ...cafeData, info: { ...cafeData.info, address: e.target.value } })
                     }
                     placeholder="آدرس کامل کافه"
+                    className="text-right"
                   />
                 </div>
 
