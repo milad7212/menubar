@@ -1,15 +1,26 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Plus, Edit, Trash2, Coffee, Save, Eye, ArrowLeft, Settings, Palette, Layout } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Link from "next/link"
-import { InfoTab } from "@/components/menu-builder/InfoTab"
-import { DesignTab } from "@/components/menu-builder/DesignTab"
-import { CategoriesTab } from "@/components/menu-builder/CategoriesTab"
-import { ItemsTab } from "@/components/menu-builder/ItemsTab"
-import { PreviewMode } from "@/components/menu-builder/PreviewMode"
+import { useState } from "react";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Coffee,
+  Save,
+  Eye,
+  ArrowLeft,
+  Settings,
+  Palette,
+  Layout,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
+import { InfoTab } from "@/components/menu-builder/InfoTab";
+import { DesignTab } from "@/components/menu-builder/DesignTab";
+import { CategoriesTab } from "@/components/menu-builder/CategoriesTab";
+import { ItemsTab } from "@/components/menu-builder/ItemsTab";
+import { PreviewMode } from "@/components/menu-builder/PreviewMode";
 
 // New data structure for multiple menus
 const initialCafeData = {
@@ -69,7 +80,7 @@ const initialCafeData = {
       categories: [],
     },
   ],
-}
+};
 
 const customerThemes = [
   {
@@ -98,7 +109,7 @@ const customerThemes = [
       text: "text-slate-900",
     },
   },
-    {
+  {
     id: "elegant",
     name: "شیک",
     description: "طراحی لوکس و اشرافی",
@@ -137,7 +148,7 @@ const customerThemes = [
       text: "text-white",
     },
   },
-    {
+  {
     id: "warm",
     name: "گرم",
     description: "طراحی گرم و دوستانه",
@@ -163,21 +174,25 @@ const customerThemes = [
       text: "text-white",
     },
   },
-]
+];
 
 export default function MenuBuilderPage() {
-  const [cafeData, setCafeData] = useState(initialCafeData)
-  const [activeTab, setActiveTab] = useState("info")
-  const [previewMode, setPreviewMode] = useState(false)
+  const [cafeData, setCafeData] = useState(initialCafeData);
+  const [activeTab, setActiveTab] = useState("info");
+  const [previewMode, setPreviewMode] = useState(false);
 
   // Dialog states
-  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false)
-  const [isItemDialogOpen, setIsItemDialogOpen] = useState(false)
-  const [editingCategory, setEditingCategory] = useState(null)
-  const [editingItem, setEditingItem] = useState(null)
+  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
+  const [isItemDialogOpen, setIsItemDialogOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [editingItem, setEditingItem] = useState(null);
 
   // Form states for modals
-  const [newCategory, setNewCategory] = useState({ name: "", description: "", icon: "📋" })
+  const [newCategory, setNewCategory] = useState({
+    name: "",
+    description: "",
+    icon: "📋",
+  });
   const [newItem, setNewItem] = useState({
     name: "",
     description: "",
@@ -190,21 +205,27 @@ export default function MenuBuilderPage() {
     ingredients: "",
     isPopular: false,
     isAvailable: true,
-  })
+  });
 
   // Mock handlers - these would interact with a backend in a real app
-  const handleSaveMenu = () => alert("منو با موفقیت ذخیره شد!")
-  const handlePublishMenu = () => alert("منو با موفقیت منتشر شد!")
-  const handleAddCategory = () => {}
-  const handleUpdateCategory = () => {}
-  const handleDeleteCategory = () => {}
-  const handleAddItem = () => {}
-  const handleUpdateItem = () => {}
-  const handleDeleteItem = () => {}
-  const handleEditItem = () => {}
+  const handleSaveMenu = () => alert("منو با موفقیت ذخیره شد!");
+  const handlePublishMenu = () => alert("منو با موفقیت منتشر شد!");
+  const handleAddCategory = () => {};
+  const handleUpdateCategory = () => {};
+  const handleDeleteCategory = () => {};
+  const handleAddItem = () => {};
+  const handleUpdateItem = () => {};
+  const handleDeleteItem = () => {};
+  const handleEditItem = () => {};
 
   if (previewMode) {
-    return <PreviewMode cafeData={cafeData} setPreviewMode={setPreviewMode} customerThemes={customerThemes} />
+    return (
+      <PreviewMode
+        cafeData={cafeData}
+        setPreviewMode={setPreviewMode}
+        customerThemes={customerThemes}
+      />
+    );
   }
 
   return (
@@ -218,19 +239,35 @@ export default function MenuBuilderPage() {
               </div>
               <div>
                 <h1 className="text-lg font-bold text-gray-900">سازنده منو</h1>
-                <p className="text-xs text-gray-600 hidden sm:block">منوی اختصاصی خود را بسازید</p>
+                <p className="text-xs text-gray-600 hidden sm:block">
+                  منوی اختصاصی خود را بسازید
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-1 sm:gap-2">
-              <Button variant="outline" size="sm" onClick={() => setPreviewMode(true)} className="text-xs">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPreviewMode(true)}
+                className="text-xs"
+              >
                 <Eye className="h-4 w-4 sm:ml-2" />
                 <span className="hidden sm:inline">پیش‌نمایش</span>
               </Button>
-              <Button variant="outline" size="sm" onClick={handleSaveMenu} className="text-xs">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSaveMenu}
+                className="text-xs"
+              >
                 <Save className="h-4 w-4 sm:ml-2" />
                 <span className="hidden sm:inline">ذخیره</span>
               </Button>
-              <Button size="sm" onClick={handlePublishMenu} className="bg-gradient-to-r from-green-500 to-emerald-600 text-xs">
+              <Button
+                size="sm"
+                onClick={handlePublishMenu}
+                className="bg-gradient-to-r from-green-500 to-emerald-600 text-xs"
+              >
                 انتشار
               </Button>
               <Link href="/">
@@ -243,23 +280,40 @@ export default function MenuBuilderPage() {
         </div>
       </header>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-grow">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="flex-grow"
+        dir="rtl"
+      >
         <div className="bg-white border-b sticky top-[61px] z-30">
           <div className="container mx-auto px-4">
             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-              <TabsTrigger value="info" className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3">
+              <TabsTrigger
+                value="info"
+                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+              >
                 <Settings className="h-5 w-5" />
                 <span>اطلاعات کافه</span>
               </TabsTrigger>
-              <TabsTrigger value="design" className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3">
+              <TabsTrigger
+                value="design"
+                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+              >
                 <Palette className="h-5 w-5" />
                 <span>انتخاب تم</span>
               </TabsTrigger>
-              <TabsTrigger value="categories" className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3">
+              <TabsTrigger
+                value="categories"
+                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+              >
                 <Layout className="h-5 w-5" />
                 <span>دسته‌بندی‌ها</span>
               </TabsTrigger>
-              <TabsTrigger value="items" className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3">
+              <TabsTrigger
+                value="items"
+                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+              >
                 <Coffee className="h-5 w-5" />
                 <span>آیتم‌های منو</span>
               </TabsTrigger>
@@ -269,10 +323,19 @@ export default function MenuBuilderPage() {
 
         <div className="container mx-auto px-4 py-6">
           <TabsContent value="info">
-            <InfoTab cafeData={cafeData} setCafeData={setCafeData} handleSaveMenu={handleSaveMenu} />
+            <InfoTab
+              cafeData={cafeData}
+              setCafeData={setCafeData}
+              handleSaveMenu={handleSaveMenu}
+            />
           </TabsContent>
           <TabsContent value="design">
-            <DesignTab cafeData={cafeData} setCafeData={setCafeData} customerThemes={customerThemes} setPreviewMode={setPreviewMode} />
+            <DesignTab
+              cafeData={cafeData}
+              setCafeData={setCafeData}
+              customerThemes={customerThemes}
+              setPreviewMode={setPreviewMode}
+            />
           </TabsContent>
           <TabsContent value="categories">
             <CategoriesTab
@@ -306,5 +369,5 @@ export default function MenuBuilderPage() {
         </div>
       </Tabs>
     </div>
-  )
+  );
 }
