@@ -104,32 +104,32 @@ export default function MenuBuilderPage() {
         dir="rtl"
       >
         <div className="bg-white border-b sticky top-[61px] z-30">
-          <div className="container mx-auto px-4">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+          <div className="container mx-auto px-4 sm:px-0">
+            <TabsList className="flex overflow-x-auto scrollbar-hide">
               <TabsTrigger
                 value="info"
-                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+                className="flex-row items-center gap-2 text-xs sm:text-sm py-3 whitespace-nowrap"
               >
                 <Settings className="h-5 w-5" />
                 <span>اطلاعات کافه</span>
               </TabsTrigger>
               <TabsTrigger
                 value="design"
-                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+                className="flex-row items-center gap-2 text-xs sm:text-sm py-3 whitespace-nowrap"
               >
                 <Palette className="h-5 w-5" />
                 <span>انتخاب تم</span>
               </TabsTrigger>
               <TabsTrigger
                 value="categories"
-                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+                className="flex-row items-center gap-2 text-xs sm:text-sm py-3 whitespace-nowrap"
               >
                 <Layout className="h-5 w-5" />
                 <span>دسته‌بندی‌ها</span>
               </TabsTrigger>
               <TabsTrigger
                 value="items"
-                className="flex flex-col sm:flex-row items-center gap-2 text-xs sm:text-sm py-3"
+                className="flex-row items-center gap-2 text-xs sm:text-sm py-3 whitespace-nowrap"
               >
                 <Coffee className="h-5 w-5" />
                 <span>آیتم‌های منو</span>
