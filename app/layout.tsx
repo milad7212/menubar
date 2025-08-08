@@ -1,8 +1,8 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
 import { Vazirmatn } from "next/font/google"
 import "./globals.css"
+import { CafeProvider } from "@/context/CafeContext"
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
@@ -10,9 +10,8 @@ const vazirmatn = Vazirmatn({
 })
 
 export const metadata: Metadata = {
-  title: "سیستم مدیریت منوی کافه",
-  description: "سیستم جامع مدیریت منو برای کافه‌ها و رستوران‌ها",
-    generator: 'v0.dev'
+  title: "کافه ساز | منوی کافه خود را بسازید",
+  description: "ابزاری برای ساخت آسان و سریع منوی دیجیتال برای کافه‌ها و رستوران‌ها",
 }
 
 export default function RootLayout({
@@ -22,7 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl">
-      <body className={vazirmatn.className}>{children}</body>
+      <body className={vazirmatn.className}>
+        <CafeProvider>{children}</CafeProvider>
+      </body>
     </html>
   )
 }

@@ -1,10 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from "react"
 import {
-  Plus,
-  Edit,
-  Trash2,
   Coffee,
   Save,
   Eye,
@@ -12,211 +9,31 @@ import {
   Settings,
   Palette,
   Layout,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Link from "next/link";
-import { InfoTab } from "@/components/menu-builder/InfoTab";
-import { DesignTab } from "@/components/menu-builder/DesignTab";
-import { CategoriesTab } from "@/components/menu-builder/CategoriesTab";
-import { ItemsTab } from "@/components/menu-builder/ItemsTab";
-import { PreviewMode } from "@/components/menu-builder/PreviewMode";
-
-// New data structure for multiple menus
-const initialCafeData = {
-  info: {
-    name: "کافه من",
-    description: "بهترین قهوه و غذاهای خوشمزه",
-    address: "آدرس کافه شما",
-    phone: "شماره تماس",
-    logo: "",
-    selectedTheme: "modern-dark",
-  },
-  menus: [
-    {
-      id: 1,
-      name: "منوی اصلی",
-      timeSlots: [{ day: "all", from: "08:00", to: "23:00" }],
-      categories: [
-        {
-          id: 101,
-          name: "نوشیدنی‌های گرم",
-          description: "قهوه‌ها و نوشیدنی‌های گرم",
-          icon: "☕",
-          order: 1,
-          isVisible: true,
-          items: [
-            {
-              id: 1001,
-              name: "اسپرسو",
-              description: "قهوه خالص و قوی",
-              price: 45000,
-              originalPrice: 0,
-              image: "",
-              isAvailable: true,
-              isPopular: false,
-              preparationTime: "۲-۳ دقیقه",
-              calories: 5,
-              ingredients: ["قهوه آرابیکا", "آب خالص"],
-              order: 1,
-            },
-          ],
-        },
-        {
-          id: 102,
-          name: "نوشیدنی‌های سرد",
-          description: "نوشیدنی‌های خنک و منعش",
-          icon: "🧊",
-          order: 2,
-          isVisible: true,
-          items: [],
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "منوی صبحانه",
-      timeSlots: [{ day: "all", from: "08:00", to: "12:00" }],
-      categories: [],
-    },
-  ],
-};
-
-const customerThemes = [
-  {
-    id: "classic",
-    name: "کلاسیک",
-    description: "طراحی سنتی و گرم",
-    preview: "/placeholder.svg?height=200&width=300&text=Classic+Theme",
-    colors: {
-      primary: "#8B4513",
-      secondary: "#D2691E",
-      background: "from-amber-50 to-orange-100",
-      card: "bg-white",
-      text: "text-gray-900",
-    },
-  },
-  {
-    id: "modern",
-    name: "مدرن",
-    description: "طراحی مینیمال و شیک",
-    preview: "/placeholder.svg?height=200&width=300&text=Modern+Theme",
-    colors: {
-      primary: "#2563eb",
-      secondary: "#1d4ed8",
-      background: "from-slate-50 to-blue-100",
-      card: "bg-white/80 backdrop-blur-sm",
-      text: "text-slate-900",
-    },
-  },
-  {
-    id: "elegant",
-    name: "شیک",
-    description: "طراحی لوکس و اشرافی",
-    preview: "/placeholder.svg?height=200&width=300&text=Elegant+Theme",
-    colors: {
-      primary: "#7c3aed",
-      secondary: "#5b21b6",
-      background: "from-purple-50 to-indigo-100",
-      card: "bg-white/90 backdrop-blur-md",
-      text: "text-purple-900",
-    },
-  },
-  {
-    id: "nature",
-    name: "طبیعی",
-    description: "طراحی سبز و طبیعی",
-    preview: "/placeholder.svg?height=200&width=300&text=Nature+Theme",
-    colors: {
-      primary: "#059669",
-      secondary: "#047857",
-      background: "from-green-50 to-emerald-100",
-      card: "bg-white/85",
-      text: "text-green-900",
-    },
-  },
-  {
-    id: "dark",
-    name: "تیره",
-    description: "طراحی مدرن و تیره",
-    preview: "/placeholder.svg?height=200&width=300&text=Dark+Theme",
-    colors: {
-      primary: "#f59e0b",
-      secondary: "#d97706",
-      background: "from-gray-900 to-gray-800",
-      card: "bg-gray-800/80 backdrop-blur-sm",
-      text: "text-white",
-    },
-  },
-  {
-    id: "warm",
-    name: "گرم",
-    description: "طراحی گرم و دوستانه",
-    preview: "/placeholder.svg?height=200&width=300&text=Warm+Theme",
-    colors: {
-      primary: "#dc2626",
-      secondary: "#b91c1c",
-      background: "from-red-50 to-pink-100",
-      card: "bg-white/90",
-      text: "text-red-900",
-    },
-  },
-  {
-    id: "3d-luxury",
-    name: "سه‌بعدی لوکس",
-    description: "طراحی سه‌بعدی مدرن با افکت‌های شیک",
-    preview: "/placeholder.svg?height=200&width=300&text=3D+Luxury+Theme",
-    colors: {
-      primary: "#6366f1",
-      secondary: "#8b5cf6",
-      background: "from-slate-900 via-purple-900 to-slate-900",
-      card: "bg-white/10 backdrop-blur-xl border border-white/20",
-      text: "text-white",
-    },
-  },
-];
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Link from "next/link"
+import { InfoTab } from "@/components/menu-builder/InfoTab"
+import { DesignTab } from "@/components/menu-builder/DesignTab"
+import { CategoriesTab } from "@/components/menu-builder/CategoriesTab"
+import { ItemsTab } from "@/components/menu-builder/ItemsTab"
+import { PreviewMode } from "@/components/menu-builder/PreviewMode"
+import { useCafe } from "@/context/CafeContext"
+import { customerThemes } from "@/lib/themes"
+import { MenuManager } from "@/components/menu-builder/MenuManager"
 
 export default function MenuBuilderPage() {
-  const [cafeData, setCafeData] = useState(initialCafeData);
-  const [activeTab, setActiveTab] = useState("info");
-  const [previewMode, setPreviewMode] = useState(false);
-
-  // Dialog states
-  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
-  const [isItemDialogOpen, setIsItemDialogOpen] = useState(false);
-  const [editingCategory, setEditingCategory] = useState(null);
-  const [editingItem, setEditingItem] = useState(null);
-
-  // Form states for modals
-  const [newCategory, setNewCategory] = useState({
-    name: "",
-    description: "",
-    icon: "📋",
-  });
-  const [newItem, setNewItem] = useState({
-    name: "",
-    description: "",
-    price: "",
-    originalPrice: "",
-    categoryId: "",
-    image: "",
-    preparationTime: "",
-    calories: "",
-    ingredients: "",
-    isPopular: false,
-    isAvailable: true,
-  });
+  const { cafeData } = useCafe()
+  const [activeTab, setActiveTab] = useState("info")
+  const [previewMode, setPreviewMode] = useState(false)
 
   // Mock handlers - these would interact with a backend in a real app
-  const handleSaveMenu = () => alert("منو با موفقیت ذخیره شد!");
-  const handlePublishMenu = () => alert("منو با موفقیت منتشر شد!");
-  const handleAddCategory = () => {};
-  const handleUpdateCategory = () => {};
-  const handleDeleteCategory = () => {};
-  const handleAddItem = () => {};
-  const handleUpdateItem = () => {};
-  const handleDeleteItem = () => {};
-  const handleEditItem = () => {};
+  const handleSaveMenu = () => alert("منو با موفقیت ذخیره شد!")
+  const handlePublishMenu = () => alert("منو با موفقیت منتشر شد!")
+
+  if (!cafeData) {
+    return <div>در حال بارگذاری...</div>
+  }
 
   if (previewMode) {
     return (
@@ -225,7 +42,7 @@ export default function MenuBuilderPage() {
         setPreviewMode={setPreviewMode}
         customerThemes={customerThemes}
       />
-    );
+    )
   }
 
   return (
@@ -321,50 +138,19 @@ export default function MenuBuilderPage() {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-6 space-y-6">
+          <MenuManager />
           <TabsContent value="info">
-            <InfoTab
-              cafeData={cafeData}
-              setCafeData={setCafeData}
-              handleSaveMenu={handleSaveMenu}
-            />
+            <InfoTab />
           </TabsContent>
           <TabsContent value="design">
-            <DesignTab
-              cafeData={cafeData}
-              setCafeData={setCafeData}
-              customerThemes={customerThemes}
-              setPreviewMode={setPreviewMode}
-            />
+            <DesignTab setPreviewMode={setPreviewMode} />
           </TabsContent>
           <TabsContent value="categories">
-            <CategoriesTab
-              cafeData={cafeData}
-              isCategoryDialogOpen={isCategoryDialogOpen}
-              setIsCategoryDialogOpen={setIsCategoryDialogOpen}
-              editingCategory={editingCategory}
-              setEditingCategory={setEditingCategory}
-              newCategory={newCategory}
-              setNewCategory={setNewCategory}
-              handleAddCategory={handleAddCategory}
-              handleUpdateCategory={handleUpdateCategory}
-              handleDeleteCategory={handleDeleteCategory}
-            />
+            <CategoriesTab />
           </TabsContent>
           <TabsContent value="items">
-            <ItemsTab
-              cafeData={cafeData}
-              isItemDialogOpen={isItemDialogOpen}
-              setIsItemDialogOpen={setIsItemDialogOpen}
-              editingItem={editingItem}
-              setEditingItem={setEditingItem}
-              newItem={newItem}
-              setNewItem={setNewItem}
-              handleAddItem={handleAddItem}
-              handleUpdateItem={handleUpdateItem}
-              handleDeleteItem={handleDeleteItem}
-              handleEditItem={handleEditItem}
-            />
+            <ItemsTab />
           </TabsContent>
         </div>
       </Tabs>

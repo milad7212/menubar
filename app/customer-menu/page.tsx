@@ -11,224 +11,14 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Textarea } from "@/components/ui/textarea"
 import Link from "next/link"
 import Image from "next/image"
+import { useCafe } from "@/context/CafeContext"
+import { customerThemes } from "@/lib/themes"
 
-// Mock data - این داده‌ها از سازنده منو می‌آیند
-const cafeInfo = {
-  name: "کافه آرامش",
-  description: "بهترین قهوه و غذاهای خوشمزه در شهر",
-  address: "تهران، خیابان ولیعصر، پلاک ۱۲۳",
-  phone: "۰۲۱-۱۲۳۴۵۶۷۸",
-  hours: "۸:۰۰ - ۲۳:۰۰",
-  logo: "",
-  selectedTheme: "classic", // This comes from menu builder
-  rating: 4.8,
-  reviewCount: 1250,
-}
-
-const customerThemes = {
-  classic: {
-    colors: {
-      primary: "#8B4513",
-      secondary: "#D2691E",
-      background: "from-amber-50 to-orange-100",
-      card: "bg-white",
-      text: "text-gray-900",
-    },
-  },
-  modern: {
-    colors: {
-      primary: "#2563eb",
-      secondary: "#1d4ed8",
-      background: "from-slate-50 to-blue-100",
-      card: "bg-white/80 backdrop-blur-sm",
-      text: "text-slate-900",
-    },
-  },
-  elegant: {
-    colors: {
-      primary: "#7c3aed",
-      secondary: "#5b21b6",
-      background: "from-purple-50 to-indigo-100",
-      card: "bg-white/90 backdrop-blur-md",
-      text: "text-purple-900",
-    },
-  },
-  nature: {
-    colors: {
-      primary: "#059669",
-      secondary: "#047857",
-      background: "from-green-50 to-emerald-100",
-      card: "bg-white/85",
-      text: "text-green-900",
-    },
-  },
-  dark: {
-    colors: {
-      primary: "#f59e0b",
-      secondary: "#d97706",
-      background: "from-gray-900 to-gray-800",
-      card: "bg-gray-800/80 backdrop-blur-sm",
-      text: "text-white",
-    },
-  },
-  warm: {
-    colors: {
-      primary: "#dc2626",
-      secondary: "#b91c1c",
-      background: "from-red-50 to-pink-100",
-      card: "bg-white/90",
-      text: "text-red-900",
-    },
-  },
-  "3d-luxury": {
-    colors: {
-      primary: "#6366f1",
-      secondary: "#8b5cf6",
-      background: "from-slate-900 via-purple-900 to-slate-900",
-      card: "bg-white/10 backdrop-blur-xl border border-white/20",
-      text: "text-white",
-    },
-  },
-}
-
-const categories = [
-  {
-    id: 1,
-    name: "نوشیدنی‌های گرم",
-    description: "قهوه‌ها و نوشیدنی‌های گرم",
-    icon: "☕",
-    isVisible: true,
-  },
-  {
-    id: 2,
-    name: "نوشیدنی‌های سرد",
-    description: "نوشیدنی‌های خنک و منعش",
-    icon: "🧊",
-    isVisible: true,
-  },
-  {
-    id: 3,
-    name: "غذاهای اصلی",
-    description: "غذاهای اصلی و ساندویچ‌ها",
-    icon: "🍽️",
-    isVisible: true,
-  },
-  {
-    id: 4,
-    name: "دسرها",
-    description: "دسرهای خوشمزه",
-    icon: "🍰",
-    isVisible: true,
-  },
-]
-
-const menuItems = [
-  {
-    id: 1,
-    categoryId: 1,
-    name: "اسپرسو کلاسیک",
-    description: "قهوه خالص و قوی با طعم بی‌نظیر",
-    fullDescription:
-      "اسپرسو کلاسیک ما از بهترین دانه‌های قهوه آرابیکا تهیه می‌شود. این قهوه با روش سنتی ایتالیایی دم‌آوری شده و طعم غنی و عمیقی دارد که عاشقان قهوه را مجذوب خود می‌کند.",
-    price: 45000,
-    originalPrice: 55000,
-    image: "/placeholder.svg?height=300&width=300",
-    rating: 4.9,
-    reviewCount: 234,
-    likes: 156,
-    isLiked: false,
-    ingredients: ["قهوه آرابیکا", "آب خالص"],
-    calories: 5,
-    prepTime: "۲-۳ دقیقه",
-    isPopular: true,
-    isAvailable: true,
-  },
-  {
-    id: 2,
-    categoryId: 1,
-    name: "کاپوچینو دلوکس",
-    description: "قهوه با شیر بخارپز و فوم ابریشمی",
-    fullDescription:
-      "کاپوچینو دلوکس ما ترکیبی عالی از اسپرسو قوی و شیر بخارپز شده است. فوم ابریشمی روی آن و پودر کاکائو باعث می‌شود تا تجربه‌ای فراموش‌نشدنی داشته باشید.",
-    price: 65000,
-    originalPrice: 75000,
-    image: "/placeholder.svg?height=300&width=300",
-    rating: 4.7,
-    reviewCount: 189,
-    likes: 203,
-    isLiked: true,
-    ingredients: ["اسپرسو", "شیر تازه", "فوم شیر", "پودر کاکائو"],
-    calories: 120,
-    prepTime: "۴-۵ دقیقه",
-    isPopular: false,
-    isAvailable: true,
-  },
-  {
-    id: 3,
-    categoryId: 2,
-    name: "آیس کافه ویژه",
-    description: "قهوه سرد منعش با یخ و کرم",
-    fullDescription:
-      "آیس کافه ویژه ما برای روزهای گرم تابستان طراحی شده است. ترکیب قهوه قوی، یخ، شیر سرد و کرم چنتی باعث می‌شود تا انرژی و طراوت را به شما برگرداند.",
-    price: 55000,
-    originalPrice: 65000,
-    image: "/placeholder.svg?height=300&width=300",
-    rating: 4.6,
-    reviewCount: 145,
-    likes: 98,
-    isLiked: false,
-    ingredients: ["قهوه سرد", "یخ", "شیر", "کرم چنتی", "شربت وانیل"],
-    calories: 180,
-    prepTime: "۳-۴ دقیقه",
-    isPopular: true,
-    isAvailable: true,
-  },
-  {
-    id: 4,
-    categoryId: 3,
-    name: "ساندویچ کلاب ممتاز",
-    description: "ساندویچ مرغ با سبزیجات تازه و سس مخصوص",
-    fullDescription:
-      "ساندویچ کلاب ممتاز ما با مرغ گریل شده، کاهو تازه، گوجه، خیار، پنیر چدار و سس مخصوص کافه تهیه می‌شود. نان تست شده و مواد اولیه تازه باعث طعم فوق‌العاده‌ای می‌شود.",
-    price: 120000,
-    originalPrice: 140000,
-    image: "/placeholder.svg?height=300&width=300",
-    rating: 4.8,
-    reviewCount: 312,
-    likes: 267,
-    isLiked: true,
-    ingredients: ["مرغ گریل", "نان تست", "کاهو", "گوجه", "خیار", "پنیر چدار", "سس مخصوص"],
-    calories: 450,
-    prepTime: "۸-۱۰ دقیقه",
-    isPopular: true,
-    isAvailable: true,
-  },
-  {
-    id: 5,
-    categoryId: 4,
-    name: "تیرامیسو خانگی",
-    description: "دسر ایتالیایی با قهوه و ماسکارپونه",
-    fullDescription:
-      "تیرامیسو خانگی ما با دستور اصیل ایتالیایی تهیه می‌شود. لایه‌های نرم بیسکویت آغشته به قهوه، کرم ماسکارپونه و پودر کاکائو طعمی بی‌نظیر ایجاد می‌کند.",
-    price: 85000,
-    originalPrice: 95000,
-    image: "/placeholder.svg?height=300&width=300",
-    rating: 4.9,
-    reviewCount: 198,
-    likes: 234,
-    isLiked: false,
-    ingredients: ["بیسکویت لیدی فینگر", "قهوه اسپرسو", "ماسکارپونه", "تخم مرغ", "شکر", "کاکائو"],
-    calories: 320,
-    prepTime: "تهیه شده",
-    isPopular: true,
-    isAvailable: true,
-  },
-]
-
+// Mock data for comments, as this is not part of the menu builder
 const comments = [
   {
     id: 1,
-    itemId: 1,
+    itemId: 1001,
     user: "علی احمدی",
     avatar: "/placeholder.svg?height=40&width=40",
     rating: 5,
@@ -238,7 +28,7 @@ const comments = [
   },
   {
     id: 2,
-    itemId: 1,
+    itemId: 1001,
     user: "مریم کریمی",
     avatar: "/placeholder.svg?height=40&width=40",
     rating: 4,
@@ -249,15 +39,28 @@ const comments = [
 ]
 
 export default function CustomerMenuPage() {
+  const { cafeData, activeMenuId } = useCafe()
   const [selectedItem, setSelectedItem] = useState<any>(null)
   const [cart, setCart] = useState<any[]>([])
-  const [likedItems, setLikedItems] = useState<number[]>([2, 4])
+  const [likedItems, setLikedItems] = useState<number[]>([2, 4]) // This is local state
   const [newComment, setNewComment] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("همه")
 
-  const theme = customerThemes[cafeInfo.selectedTheme as keyof typeof customerThemes] || customerThemes.classic
+  if (!cafeData) {
+    return <div>در حال بارگذاری اطلاعات کافه...</div>
+  }
 
-  const categoryList = ["همه", ...categories.filter((cat) => cat.isVisible).map((cat) => cat.name)]
+  const cafeInfo = cafeData.info
+  const activeMenu = cafeData.menus.find((m) => m.id === activeMenuId)
+
+  if (!activeMenu) {
+    return <div>منویی برای نمایش انتخاب نشده است.</div>
+  }
+
+  const theme = customerThemes.find((t) => t.id === cafeInfo.selectedTheme) || customerThemes[0]
+  const categories = activeMenu.categories.filter((cat) => cat.isVisible)
+  const menuItems = categories.flatMap((cat) => cat.items.map(item => ({...item, categoryId: cat.id})))
+  const categoryList = ["همه", ...categories.map((cat) => cat.name)]
 
   const addToCart = (item: any, quantity = 1) => {
     const existingItem = cart.find((cartItem) => cartItem.id === item.id)
@@ -321,7 +124,7 @@ export default function CustomerMenuPage() {
                   alt="لوگو"
                   width={48}
                   height={48}
-                  className="rounded-full"
+                  className="rounded-full object-cover"
                 />
               ) : (
                 <div
@@ -333,11 +136,7 @@ export default function CustomerMenuPage() {
               )}
               <div>
                 <h1 className="text-xl font-bold text-gray-900">{cafeInfo.name}</h1>
-                <div className="flex items-center gap-1 text-sm text-gray-600">
-                  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                  <span>{cafeInfo.rating}</span>
-                  <span>({cafeInfo.reviewCount.toLocaleString("fa-IR")} نظر)</span>
-                </div>
+                <p className="text-sm text-gray-600">{cafeInfo.description}</p>
               </div>
             </div>
 
@@ -429,7 +228,7 @@ export default function CustomerMenuPage() {
             </div>
             <div className="flex items-center gap-1">
               <Clock className="h-4 w-4" />
-              <span>ساعات کاری: {cafeInfo.hours}</span>
+              <span>{cafeInfo.phone}</span>
             </div>
           </div>
         </div>

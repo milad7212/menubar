@@ -4,8 +4,21 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Save } from "lucide-react"
+import { useCafe } from "@/context/CafeContext"
 
-export function InfoTab({ cafeData, setCafeData, handleSaveMenu }) {
+export function InfoTab() {
+  const { cafeData, setCafeData } = useCafe()
+
+  const handleInputChange = (field: string, value: string) => {
+    setCafeData({ ...cafeData, info: { ...cafeData.info, [field]: value } })
+  }
+
+  const handleSaveMenu = () => {
+    // In a real app, this would save to a backend.
+    // For now, we can show a toast notification.
+    alert("اطلاعات با موفقیت ذخیره شد!")
+  }
+
   return (
     <Card>
       <CardHeader className="text-right">
@@ -19,7 +32,7 @@ export function InfoTab({ cafeData, setCafeData, handleSaveMenu }) {
             <Input
               id="cafe-name"
               value={cafeData.info.name}
-              onChange={(e) => setCafeData({ ...cafeData, info: { ...cafeData.info, name: e.target.value } })}
+              onChange={(e) => handleInputChange("name", e.target.value)}
               placeholder="نام کافه شما"
               className="text-right"
             />
@@ -29,7 +42,7 @@ export function InfoTab({ cafeData, setCafeData, handleSaveMenu }) {
             <Input
               id="cafe-phone"
               value={cafeData.info.phone}
-              onChange={(e) => setCafeData({ ...cafeData, info: { ...cafeData.info, phone: e.target.value } })}
+              onChange={(e) => handleInputChange("phone", e.target.value)}
               placeholder="۰۲۱-۱۲۳۴۵۶۷۸"
               className="text-right"
             />
@@ -41,9 +54,7 @@ export function InfoTab({ cafeData, setCafeData, handleSaveMenu }) {
           <Textarea
             id="cafe-description"
             value={cafeData.info.description}
-            onChange={(e) =>
-              setCafeData({ ...cafeData, info: { ...cafeData.info, description: e.target.value } })
-            }
+            onChange={(e) => handleInputChange("description", e.target.value)}
             placeholder="توضیح کوتاهی از کافه شما"
             rows={3}
             className="text-right"
@@ -55,9 +66,7 @@ export function InfoTab({ cafeData, setCafeData, handleSaveMenu }) {
           <Input
             id="cafe-address"
             value={cafeData.info.address}
-            onChange={(e) =>
-              setCafeData({ ...cafeData, info: { ...cafeData.info, address: e.target.value } })
-            }
+            onChange={(e) => handleInputChange("address", e.target.value)}
             placeholder="آدرس کامل کافه"
             className="text-right"
           />
@@ -68,7 +77,7 @@ export function InfoTab({ cafeData, setCafeData, handleSaveMenu }) {
           <Input
             id="cafe-logo"
             value={cafeData.info.logo}
-            onChange={(e) => setCafeData({ ...cafeData, info: { ...cafeData.info, logo: e.target.value } })}
+            onChange={(e) => handleInputChange("logo", e.target.value)}
             placeholder="https://example.com/logo.png"
             dir="ltr"
           />

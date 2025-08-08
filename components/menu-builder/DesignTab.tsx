@@ -3,9 +3,18 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import { Eye } from "lucide-react"
+import { useCafe } from "@/context/CafeContext"
+import { customerThemes } from "@/lib/themes"
 
-export function DesignTab({ cafeData, setCafeData, customerThemes, setPreviewMode }) {
-  const selectedTheme = customerThemes.find((theme) => theme.id === cafeData.info.selectedTheme) || customerThemes[0]
+export function DesignTab({ setPreviewMode }) {
+  const { cafeData, setCafeData } = useCafe()
+
+  const handleThemeSelect = (themeId: string) => {
+    setCafeData({ ...cafeData, info: { ...cafeData.info, selectedTheme: themeId } })
+  }
+
+  const selectedTheme =
+    customerThemes.find((theme) => theme.id === cafeData.info.selectedTheme) || customerThemes[0]
 
   return (
     <Card>
@@ -21,9 +30,7 @@ export function DesignTab({ cafeData, setCafeData, customerThemes, setPreviewMod
               className={`cursor-pointer transition-all hover:shadow-lg ${
                 cafeData.info.selectedTheme === theme.id ? "ring-2 ring-blue-500 shadow-lg" : ""
               }`}
-              onClick={() =>
-                setCafeData({ ...cafeData, info: { ...cafeData.info, selectedTheme: theme.id } })
-              }
+              onClick={() => handleThemeSelect(theme.id)}
             >
               <div className="aspect-video relative overflow-hidden rounded-t-lg">
                 <Image
@@ -59,7 +66,7 @@ export function DesignTab({ cafeData, setCafeData, customerThemes, setPreviewMod
                   className="w-full bg-transparent"
                   onClick={(e) => {
                     e.stopPropagation()
-                    setCafeData({ ...cafeData, info: { ...cafeData.info, selectedTheme: theme.id } })
+                    handleThemeSelect(theme.id)
                     setTimeout(() => setPreviewMode(true), 100)
                   }}
                 >
