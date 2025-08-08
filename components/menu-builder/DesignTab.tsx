@@ -7,14 +7,23 @@ import { useCafe } from "@/context/CafeContext"
 import { customerThemes } from "@/lib/themes"
 
 export function DesignTab({ setPreviewMode }) {
-  const { cafeData, setCafeData } = useCafe()
+  const { cafeData, updateCafeInfo } = useCafe()
 
-  const handleThemeSelect = (themeId: string) => {
-    setCafeData({ ...cafeData, info: { ...cafeData.info, selectedTheme: themeId } })
+  const handleThemeSelect = async (themeId: string) => {
+    if (!cafeData || !cafeData.info) return
+    try {
+      await updateCafeInfo({ ...cafeData.info, selected_theme: themeId })
+    } catch (error) {
+      alert("خطا در به‌روزرسانی تم.")
+    }
+  }
+
+  if (!cafeData || !cafeData.info) {
+    return <div>در حال بارگذاری...</div>
   }
 
   const selectedTheme =
-    customerThemes.find((theme) => theme.id === cafeData.info.selectedTheme) || customerThemes[0]
+    customerThemes.find((theme) => theme.id === cafeData.info.selected_theme) || customerThemes[0]
 
   return (
     <Card>
@@ -88,9 +97,10 @@ export function DesignTab({ setPreviewMode }) {
             <Button
               variant="outline"
               className="bg-transparent"
-              onClick={() => window.open("/customer-menu", "_blank")}
+              onClick={() => window.open(`/menu/${cafeData.info.slug}`, "_blank")}
+              disabled={!cafeData.info.slug}
             >
-              مشاهده نسخه مشتری
+              مشاهده صفحه عمومی
             </Button>
           </div>
         </div>
