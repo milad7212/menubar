@@ -103,7 +103,7 @@ export default function MenuBuilderPage() {
         className="flex-grow"
         dir="rtl"
       >
-        <div className="bg-white border-b sticky top-[61px] z-30">
+        <div className="bg-white border-b">
           <div className="container mx-auto px-4 sm:px-0">
             <TabsList className="flex overflow-x-auto scrollbar-hide">
               <TabsTrigger
