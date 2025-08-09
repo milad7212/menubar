@@ -1,17 +1,49 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Coffee } from "lucide-react"
+import { Coffee, AlertCircle } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import Image from "next/image"
 
 export default function SignupPage() {
-  const handleSubmit = (e: React.FormEvent) => {
+  const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const supabase = createClient()
+
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
-    // در آینده منطق ثبت‌نام با Supabase اینجا قرار می‌گیرد
-    alert("ثبت‌نام (شبیه‌سازی شده) موفق بود! به صفحه ورود هدایت می‌شوید.")
-    window.location.href = "/login"
+    setIsLoading(true)
+    setError(null)
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        // emailRedirectTo is not strictly required for signup,
+        // but it's good practice for email confirmation flows.
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
+    })
+
+    if (error) {
+      setError(error.message)
+      setIsLoading(false)
+    } else {
+      // Supabase sends a confirmation email. You might want to show a message
+      // to the user to check their email. For this app, we'll just redirect
+      // to a page that tells them to confirm.
+      router.push("/confirm-email")
+    }
   }
 
   return (
@@ -19,31 +51,45 @@ export default function SignupPage() {
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
-            <Link href="/landing" className="inline-block mb-4">
+            <Link href="/" className="inline-block mb-4">
               <Coffee className="h-10 w-10 text-amber-600 mx-auto" />
             </Link>
             <h1 className="text-3xl font-bold">ایجاد حساب</h1>
-            <p className="text-balance text-muted-foreground">برای شروع مدیریت کافه خود، اطلاعات زیر را وارد کنید</p>
+            <p className="text-balance text-muted-foreground">برای شروع مدیریت کافه خود، ایمیل و رمز عبور را وارد کنید</p>
           </div>
-          <form onSubmit={handleSubmit} className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="cafe-name">نام کافه</Label>
-              <Input id="cafe-name" placeholder="کافه آرامش" required />
-            </div>
+          <form onSubmit={handleSignUp} className="grid gap-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>خطا در ثبت‌نام</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
             <div className="grid gap-2">
               <Label htmlFor="email">ایمیل</Label>
-              <Input id="email" type="email" placeholder="m@example.com" required />
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">رمز عبور</Label>
-              <Input id="password" type="password" required />
+              <Input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+              />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="confirm-password">تکرار رمز عبور</Label>
-              <Input id="confirm-password" type="password" required />
-            </div>
-            <Button type="submit" className="w-full bg-gray-900 text-white hover:bg-gray-800">
-              ثبت‌نام
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "در حال ایجاد حساب..." : "ایجاد حساب"}
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">

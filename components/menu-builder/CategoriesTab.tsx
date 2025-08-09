@@ -10,7 +10,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -22,10 +21,11 @@ const initialCategoryState = { name: "", description: "", icon: "📋" }
 export function CategoriesTab() {
   const { cafeData, activeMenuId, addCategory, updateCategory, deleteCategory } = useCafe()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editingCategory, setEditingCategory] = useState(null)
+  const [editingCategory, setEditingCategory] = useState<any>(null)
   const [category, setCategory] = useState(initialCategoryState)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const activeMenu = cafeData.menus.find((m) => m.id === activeMenuId)
+  const activeMenu = cafeData?.menus.find((m) => m.id === activeMenuId)
 
   useEffect(() => {
     if (editingCategory) {
@@ -40,14 +40,34 @@ export function CategoriesTab() {
     setIsDialogOpen(true)
   }
 
-  const handleSaveChanges = () => {
-    if (editingCategory) {
-      updateCategory(activeMenuId, category)
-    } else {
-      addCategory(activeMenuId, category)
+  const handleSaveChanges = async () => {
+    if (!activeMenuId) return
+    setIsLoading(true)
+    try {
+      if (editingCategory) {
+        await updateCategory(activeMenuId, category)
+      } else {
+        await addCategory(activeMenuId, category)
+      }
+      setIsDialogOpen(false)
+      setEditingCategory(null)
+    } catch (error) {
+      alert("خطا در ذخیره دسته‌بندی")
+    } finally {
+      setIsLoading(false)
     }
-    setIsDialogOpen(false)
-    setEditingCategory(null)
+  }
+
+  const handleDelete = async (categoryId: number) => {
+    if (!activeMenuId || !confirm("آیا از حذف این دسته‌بندی و تمام آیتم‌های آن مطمئن هستید؟")) return
+    setIsLoading(true)
+    try {
+        await deleteCategory(activeMenuId, categoryId)
+    } catch (error) {
+        alert("خطا در حذف دسته‌بندی")
+    } finally {
+        setIsLoading(false)
+    }
   }
 
   if (!activeMenu) {
@@ -57,7 +77,7 @@ export function CategoriesTab() {
           <CardTitle>مدیریت دسته‌بندی‌ها</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>لطفا ابتدا یک منو انتخاب کنید.</p>
+          <p>برای مدیریت دسته‌بندی‌ها، ابتدا یک منو از بالا انتخاب کنید.</p>
         </CardContent>
       </Card>
     )
@@ -71,7 +91,7 @@ export function CategoriesTab() {
             <CardTitle>مدیریت دسته‌بندی‌ها</CardTitle>
             <CardDescription>دسته‌بندی‌های منوی «{activeMenu.name}» را مدیریت کنید</CardDescription>
           </div>
-          <Button onClick={() => handleOpenDialog()}>
+          <Button onClick={() => handleOpenDialog()} disabled={isLoading}>
             <Plus className="h-4 w-4 ml-2" />
             افزودن دسته‌بندی
           </Button>
@@ -97,16 +117,18 @@ export function CategoriesTab() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Switch
-                    checked={cat.isVisible}
-                    onCheckedChange={(checked) => updateCategory(activeMenuId, { ...cat, isVisible: checked })}
+                    checked={cat.is_visible}
+                    onCheckedChange={(checked) => updateCategory(activeMenuId, { ...cat, is_visible: checked })}
+                    disabled={isLoading}
                   />
-                  <Button variant="outline" size="sm" onClick={() => handleOpenDialog(cat)}>
+                  <Button variant="outline" size="sm" onClick={() => handleOpenDialog(cat)} disabled={isLoading}>
                     <Edit className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => deleteCategory(activeMenuId, cat.id)}
+                    onClick={() => handleDelete(cat.id)}
+                    disabled={isLoading}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -154,7 +176,9 @@ export function CategoriesTab() {
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleSaveChanges}>{editingCategory ? "بروزرسانی" : "افزودن"}</Button>
+              <Button onClick={handleSaveChanges} disabled={isLoading}>
+                {isLoading ? "در حال ذخیره..." : (editingCategory ? "بروزرسانی" : "افزودن")}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

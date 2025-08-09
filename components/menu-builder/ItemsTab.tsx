@@ -23,30 +23,31 @@ const initialItemState = {
   name: "",
   description: "",
   price: "",
-  originalPrice: "",
-  categoryId: "",
-  image: "",
-  preparationTime: "",
+  original_price: "",
+  category_id: "",
+  image_url: "",
+  preparation_time: "",
   calories: "",
   ingredients: "",
-  isPopular: false,
-  isAvailable: true,
+  is_popular: false,
+  is_available: true,
 }
 
 export function ItemsTab() {
   const { cafeData, activeMenuId, addItem, updateItem, deleteItem } = useCafe()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editingItem, setEditingItem] = useState(null)
+  const [editingItem, setEditingItem] = useState<any>(null)
   const [item, setItem] = useState(initialItemState)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const activeMenu = cafeData.menus.find((m) => m.id === activeMenuId)
+  const activeMenu = cafeData?.menus.find((m) => m.id === activeMenuId)
 
   useEffect(() => {
     if (editingItem) {
       setItem({
         ...editingItem,
         price: editingItem.price.toString(),
-        originalPrice: editingItem.originalPrice?.toString() || "",
+        original_price: editingItem.original_price?.toString() || "",
         calories: editingItem.calories?.toString() || "",
         ingredients: Array.isArray(editingItem.ingredients) ? editingItem.ingredients.join(", ") : "",
       })
@@ -57,24 +58,51 @@ export function ItemsTab() {
 
   const handleOpenDialog = (item = null) => {
     setEditingItem(item)
+    // If we are adding a new item and there's only one category, pre-select it.
+    if (!item && activeMenu?.categories.length === 1) {
+      setItem(prev => ({...prev, category_id: activeMenu.categories[0].id.toString()}))
+    }
     setIsDialogOpen(true)
   }
 
-  const handleSaveChanges = () => {
-    const itemToSave = {
-      ...item,
-      price: parseFloat(item.price) || 0,
-      originalPrice: parseFloat(item.originalPrice) || 0,
-      calories: parseInt(item.calories, 10) || 0,
-      ingredients: item.ingredients.split(",").map((s) => s.trim()),
+  const handleSaveChanges = async () => {
+    if (!activeMenuId || !item.category_id) {
+      alert("لطفاً یک دسته‌بندی انتخاب کنید.")
+      return
     }
-    if (editingItem) {
-      updateItem(activeMenuId, item.categoryId, itemToSave)
-    } else {
-      addItem(activeMenuId, item.categoryId, itemToSave)
+    setIsLoading(true)
+    try {
+      const itemToSave = {
+        ...item,
+        price: parseFloat(item.price) || 0,
+        original_price: parseFloat(item.original_price) || 0,
+        calories: parseInt(item.calories, 10) || 0,
+        ingredients: item.ingredients.split(",").map((s) => s.trim()),
+      }
+      if (editingItem) {
+        await updateItem(activeMenuId, parseInt(item.category_id), itemToSave)
+      } else {
+        await addItem(activeMenuId, parseInt(item.category_id), itemToSave)
+      }
+      setIsDialogOpen(false)
+      setEditingItem(null)
+    } catch (error) {
+      alert("خطا در ذخیره آیتم")
+    } finally {
+      setIsLoading(false)
     }
-    setIsDialogOpen(false)
-    setEditingItem(null)
+  }
+
+  const handleDelete = async (categoryId: number, itemId: number) => {
+    if (!activeMenuId || !confirm("آیا از حذف این آیتم مطمئن هستید؟")) return
+    setIsLoading(true)
+    try {
+        await deleteItem(activeMenuId, categoryId, itemId)
+    } catch(error) {
+        alert("خطا در حذف آیتم")
+    } finally {
+        setIsLoading(false)
+    }
   }
 
   if (!activeMenu) {
@@ -84,7 +112,7 @@ export function ItemsTab() {
           <CardTitle>مدیریت آیتم‌ها</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>لطفا ابتدا یک منو انتخاب کنید.</p>
+          <p>برای مدیریت آیتم‌ها، ابتدا یک منو از بالا انتخاب کنید.</p>
         </CardContent>
       </Card>
     )
@@ -97,7 +125,7 @@ export function ItemsTab() {
           <CardTitle>مدیریت آیتم‌ها</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>برای افزودن آیتم، ابتدا باید یک دسته‌بندی ایجاد کنید.</p>
+          <p>برای افزودن آیتم، ابتدا باید یک دسته‌بندی در تب «دسته‌بندی‌ها» ایجاد کنید.</p>
         </CardContent>
       </Card>
     )
@@ -111,7 +139,7 @@ export function ItemsTab() {
             <CardTitle>مدیریت آیتم‌های منو</CardTitle>
             <CardDescription>محصولات و آیتم‌های منوی «{activeMenu.name}» را اضافه کنید</CardDescription>
           </div>
-          <Button onClick={() => handleOpenDialog()}>
+          <Button onClick={() => handleOpenDialog()} disabled={isLoading}>
             <Plus className="h-4 w-4 ml-2" />
             افزودن آیتم جدید
           </Button>
@@ -132,13 +160,13 @@ export function ItemsTab() {
                   <Card key={item.id} className="overflow-hidden">
                     <div className="aspect-square relative">
                       <Image
-                        src={item.image || "/placeholder.svg"}
+                        src={item.image_url || "/placeholder.svg"}
                         alt={item.name}
                         fill
                         className="object-cover"
                       />
-                      {item.isPopular && <Badge className="absolute top-2 right-2 bg-orange-500">محبوب</Badge>}
-                      {!item.isAvailable && (
+                      {item.is_popular && <Badge className="absolute top-2 right-2 bg-orange-500">محبوب</Badge>}
+                      {!item.is_available && (
                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                           <Badge variant="destructive">ناموجود</Badge>
                         </div>
@@ -149,21 +177,22 @@ export function ItemsTab() {
                       <p className="text-sm text-gray-600 mb-2 line-clamp-2 text-right">{item.description}</p>
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex gap-1">
-                          <Button variant="outline" size="sm" onClick={() => handleOpenDialog(item)}>
+                          <Button variant="outline" size="sm" onClick={() => handleOpenDialog(item)} disabled={isLoading}>
                             <Edit className="h-3 w-3" />
                           </Button>
                           <Button
                             variant="destructive"
                             size="sm"
-                            onClick={() => deleteItem(activeMenuId, category.id, item.id)}
+                            onClick={() => handleDelete(category.id, item.id)}
+                            disabled={isLoading}
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
                         </div>
                         <div className="text-right">
-                          {item.originalPrice > item.price && (
+                          {item.original_price && item.original_price > item.price && (
                             <span className="text-xs text-gray-400 line-through">
-                              {item.originalPrice.toLocaleString("fa-IR")}
+                              {item.original_price.toLocaleString("fa-IR")}
                             </span>
                           )}
                           <div className="font-bold text-green-600">
@@ -173,7 +202,7 @@ export function ItemsTab() {
                       </div>
                       <div className="flex items-center justify-between text-xs text-gray-500">
                         <span>{item.calories} کالری</span>
-                        <span>{item.preparationTime}</span>
+                        <span>{item.preparation_time}</span>
                       </div>
                     </CardContent>
                   </Card>
@@ -211,8 +240,8 @@ export function ItemsTab() {
                 <div className="space-y-2">
                   <Label htmlFor="item-category">دسته‌بندی *</Label>
                   <Select
-                    value={item.categoryId}
-                    onValueChange={(value) => setItem({ ...item, categoryId: value })}
+                    value={item.category_id}
+                    onValueChange={(value) => setItem({ ...item, category_id: value })}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="انتخاب دسته‌بندی" />
@@ -257,8 +286,8 @@ export function ItemsTab() {
                   <Input
                     id="item-original-price"
                     type="number"
-                    value={item.originalPrice}
-                    onChange={(e) => setItem({ ...item, originalPrice: e.target.value })}
+                    value={item.original_price}
+                    onChange={(e) => setItem({ ...item, original_price: e.target.value })}
                     placeholder="۵۵۰۰۰"
                     className="text-right"
                   />
@@ -281,8 +310,8 @@ export function ItemsTab() {
                   <Label htmlFor="item-prep-time">زمان آماده‌سازی</Label>
                   <Input
                     id="item-prep-time"
-                    value={item.preparationTime}
-                    onChange={(e) => setItem({ ...item, preparationTime: e.target.value })}
+                    value={item.preparation_time}
+                    onChange={(e) => setItem({ ...item, preparation_time: e.target.value })}
                     placeholder="۵-۷ دقیقه"
                     className="text-right"
                   />
@@ -291,8 +320,8 @@ export function ItemsTab() {
                   <Label htmlFor="item-image">لینک تصویر</Label>
                   <Input
                     id="item-image"
-                    value={item.image}
-                    onChange={(e) => setItem({ ...item, image: e.target.value })}
+                    value={item.image_url}
+                    onChange={(e) => setItem({ ...item, image_url: e.target.value })}
                     placeholder="https://example.com/image.jpg"
                     className="text-left"
                   />
@@ -314,24 +343,24 @@ export function ItemsTab() {
                 <div className="flex items-center space-x-2 space-x-reverse">
                   <Switch
                     id="item-popular"
-                    checked={item.isPopular}
-                    onCheckedChange={(checked) => setItem({ ...item, isPopular: checked })}
+                    checked={item.is_popular}
+                    onCheckedChange={(checked) => setItem({ ...item, is_popular: checked })}
                   />
                   <Label htmlFor="item-popular">آیتم محبوب</Label>
                 </div>
                 <div className="flex items-center space-x-2 space-x-reverse">
                   <Switch
                     id="item-available"
-                    checked={item.isAvailable}
-                    onCheckedChange={(checked) => setItem({ ...item, isAvailable: checked })}
+                    checked={item.is_available}
+                    onCheckedChange={(checked) => setItem({ ...item, is_available: checked })}
                   />
                   <Label htmlFor="item-available">موجود</Label>
                 </div>
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleSaveChanges}>
-                {editingItem ? "بروزرسانی" : "افزودن آیتم"}
+              <Button onClick={handleSaveChanges} disabled={isLoading}>
+                {isLoading ? "در حال ذخیره..." : (editingItem ? "بروزرسانی آیتم" : "افزودن آیتم")}
               </Button>
             </DialogFooter>
           </DialogContent>

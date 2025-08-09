@@ -11,8 +11,6 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Textarea } from "@/components/ui/textarea"
 import Link from "next/link"
 import Image from "next/image"
-import { useCafe } from "@/context/CafeContext"
-import { customerThemes } from "@/lib/themes"
 
 // Mock data for comments, as this is not part of the menu builder
 const comments = [
@@ -38,29 +36,25 @@ const comments = [
   },
 ]
 
-export default function CustomerMenuPage() {
-  const { cafeData, activeMenuId } = useCafe()
+export function MenuPageClient({ cafeData, customerThemes }) {
+  const [activeMenuId, setActiveMenuId] = useState(cafeData.menus[0]?.id || null)
   const [selectedItem, setSelectedItem] = useState<any>(null)
   const [cart, setCart] = useState<any[]>([])
   const [likedItems, setLikedItems] = useState<number[]>([2, 4]) // This is local state
   const [newComment, setNewComment] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("همه")
 
-  if (!cafeData) {
-    return <div>در حال بارگذاری اطلاعات کافه...</div>
-  }
-
   const cafeInfo = cafeData.info
-  const activeMenu = cafeData.menus.find((m) => m.id === activeMenuId)
+  const activeMenu = cafeData.menus.find((m: any) => m.id === activeMenuId)
 
   if (!activeMenu) {
-    return <div>منویی برای نمایش انتخاب نشده است.</div>
+    return <div className="flex justify-center items-center h-screen">این کافه هنوز منویی اضافه نکرده است.</div>
   }
 
-  const theme = customerThemes.find((t) => t.id === cafeInfo.selectedTheme) || customerThemes[0]
-  const categories = activeMenu.categories.filter((cat) => cat.isVisible)
-  const menuItems = categories.flatMap((cat) => cat.items.map(item => ({...item, categoryId: cat.id})))
-  const categoryList = ["همه", ...categories.map((cat) => cat.name)]
+  const theme = customerThemes.find((t: any) => t.id === cafeInfo.selected_theme) || customerThemes[0]
+  const categories = activeMenu.categories.filter((cat: any) => cat.is_visible)
+  const menuItems = categories.flatMap((cat: any) => cat.items.map((item: any) => ({...item, categoryId: cat.id})))
+  const categoryList = ["همه", ...categories.map((cat: any) => cat.name)]
 
   const addToCart = (item: any, quantity = 1) => {
     const existingItem = cart.find((cartItem) => cartItem.id === item.id)
@@ -105,10 +99,10 @@ export default function CustomerMenuPage() {
 
   const filteredItems =
     selectedCategory === "همه"
-      ? menuItems.filter((item) => item.isAvailable)
-      : menuItems.filter((item) => {
-          const category = categories.find((cat) => cat.name === selectedCategory)
-          return category && item.categoryId === category.id && item.isAvailable
+      ? menuItems.filter((item: any) => item.is_available)
+      : menuItems.filter((item: any) => {
+          const category = categories.find((cat: any) => cat.name === selectedCategory)
+          return category && item.categoryId === category.id && item.is_available
         })
 
   return (
@@ -118,9 +112,9 @@ export default function CustomerMenuPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-              {cafeInfo.logo ? (
+              {cafeInfo.logo_url ? (
                 <Image
-                  src={cafeInfo.logo || "/placeholder.svg"}
+                  src={cafeInfo.logo_url || "/placeholder.svg"}
                   alt="لوگو"
                   width={48}
                   height={48}
@@ -135,7 +129,7 @@ export default function CustomerMenuPage() {
                 </div>
               )}
               <div>
-                <h1 className="text-xl font-bold text-gray-900">{cafeInfo.name}</h1>
+                <h1 className="text-xl font-bold text-gray-900">{cafeInfo.cafe_name}</h1>
                 <p className="text-sm text-gray-600">{cafeInfo.description}</p>
               </div>
             </div>
@@ -165,7 +159,7 @@ export default function CustomerMenuPage() {
                         {cart.map((item) => (
                           <div key={item.id} className="flex items-center gap-3 p-3 border rounded-lg">
                             <Image
-                              src={item.image || "/placeholder.svg"}
+                              src={item.image_url || "/placeholder.svg"}
                               alt={item.name}
                               width={60}
                               height={60}
@@ -213,9 +207,9 @@ export default function CustomerMenuPage() {
                 </SheetContent>
               </Sheet>
 
-              <Link href="/menu-builder">
+              <Link href="/login">
                 <Button variant="outline" size="sm">
-                  <ArrowLeft className="h-4 w-4" />
+                  ورود
                 </Button>
               </Link>
             </div>
@@ -238,20 +232,20 @@ export default function CustomerMenuPage() {
       <div className="sticky top-[89px] z-40 bg-white/95 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 py-3">
           <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-            {categoryList.map((category) => (
+            {categoryList.map((categoryName: string) => (
               <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
+                key={categoryName}
+                variant={selectedCategory === categoryName ? "default" : "outline"}
                 size="sm"
                 className="whitespace-nowrap"
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => setSelectedCategory(categoryName)}
                 style={
-                  selectedCategory === category
+                  selectedCategory === categoryName
                     ? { backgroundColor: theme.colors.primary, borderColor: theme.colors.primary }
                     : {}
                 }
               >
-                {category}
+                {categoryName}
               </Button>
             ))}
           </div>
@@ -261,20 +255,20 @@ export default function CustomerMenuPage() {
       {/* Menu Items */}
       <main className="container mx-auto px-4 py-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {filteredItems.map((item) => (
+          {filteredItems.map((item: any) => (
             <Card
               key={item.id}
               className={`overflow-hidden hover:shadow-lg transition-all duration-300 border-0 shadow-md ${theme.colors.card}`}
             >
               <div className="relative">
                 <div className="aspect-square relative">
-                  <Image src={item.image || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
-                  {item.originalPrice > item.price && (
+                  <Image src={item.image_url || "/placeholder.svg"} alt={item.name} fill className="object-cover" />
+                  {item.original_price > item.price && (
                     <Badge className="absolute top-2 right-2 bg-red-500">
-                      {Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% تخفیف
+                      {Math.round(((item.original_price - item.price) / item.original_price) * 100)}% تخفیف
                     </Badge>
                   )}
-                  {item.isPopular && (
+                  {item.is_popular && (
                     <Badge className="absolute top-2 left-2" style={{ backgroundColor: theme.colors.secondary }}>
                       محبوب
                     </Badge>
@@ -298,12 +292,12 @@ export default function CustomerMenuPage() {
                   <div className={`flex items-center gap-2 mb-3 ${theme.colors.text} opacity-80`}>
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-medium">{item.rating}</span>
+                      <span className="text-sm font-medium">{item.rating || 5}</span>
                     </div>
                     <span className="text-gray-400">•</span>
-                    <span className="text-sm">{item.reviewCount} نظر</span>
+                    <span className="text-sm">{item.reviewCount || 0} نظر</span>
                     <span className="text-gray-400">•</span>
-                    <span className="text-sm">{item.prepTime}</span>
+                    <span className="text-sm">{item.preparation_time}</span>
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -322,9 +316,9 @@ export default function CustomerMenuPage() {
                       </Button>
                     </div>
                     <div className="text-left">
-                      {item.originalPrice > item.price && (
+                      {item.original_price > item.price && (
                         <span className={`text-sm line-through ${theme.colors.text} opacity-50`}>
-                          {item.originalPrice.toLocaleString("fa-IR")}
+                          {item.original_price.toLocaleString("fa-IR")}
                         </span>
                       )}
                       <span className="font-bold text-lg block" style={{ color: theme.colors.primary }}>
@@ -338,7 +332,7 @@ export default function CustomerMenuPage() {
                   >
                     <div className="flex items-center gap-1 text-sm">
                       <Heart className="h-4 w-4" />
-                      <span>{item.likes}</span>
+                      <span>{item.likes || 0}</span>
                     </div>
                     <Button variant="ghost" size="sm" className="text-sm p-1" onClick={() => setSelectedItem(item)}>
                       <MessageCircle className="h-4 w-4 mr-1" />
@@ -363,13 +357,13 @@ export default function CustomerMenuPage() {
                   <div className="flex items-center gap-2 mt-2">
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span>{selectedItem.rating}</span>
+                      <span>{selectedItem.rating || 5}</span>
                     </div>
                     <span>•</span>
-                    <span>{selectedItem.reviewCount} نظر</span>
+                    <span>{selectedItem.reviewCount || 0} نظر</span>
                     <span>•</span>
                     <Badge variant="secondary">
-                      {categories.find((cat) => cat.id === selectedItem.categoryId)?.name}
+                      {categories.find((cat: any) => cat.id === selectedItem.categoryId)?.name}
                     </Badge>
                   </div>
                 </DialogDescription>
@@ -378,7 +372,7 @@ export default function CustomerMenuPage() {
               <div className="space-y-4">
                 <div className="aspect-video relative rounded-lg overflow-hidden">
                   <Image
-                    src={selectedItem.image || "/placeholder.svg"}
+                    src={selectedItem.image_url || "/placeholder.svg"}
                     alt={selectedItem.name}
                     fill
                     className="object-cover"
@@ -388,7 +382,7 @@ export default function CustomerMenuPage() {
                 <div>
                   <h4 className={`font-semibold mb-2 ${theme.colors.text}`}>توضیحات کامل</h4>
                   <p className={`text-sm leading-relaxed ${theme.colors.text} opacity-80`}>
-                    {selectedItem.fullDescription}
+                    {selectedItem.description}
                   </p>
                 </div>
 
@@ -399,7 +393,7 @@ export default function CustomerMenuPage() {
                   </div>
                   <div>
                     <span className="font-medium">زمان آماده‌سازی:</span>
-                    <span className="mr-2">{selectedItem.prepTime}</span>
+                    <span className="mr-2">{selectedItem.preparation_time}</span>
                   </div>
                 </div>
 
@@ -416,9 +410,9 @@ export default function CustomerMenuPage() {
 
                 <div className={`flex items-center justify-between p-4 rounded-lg ${theme.colors.card}`}>
                   <div>
-                    {selectedItem.originalPrice > selectedItem.price && (
+                    {selectedItem.original_price > selectedItem.price && (
                       <span className={`text-sm line-through block ${theme.colors.text} opacity-50`}>
-                        {selectedItem.originalPrice.toLocaleString("fa-IR")} تومان
+                        {selectedItem.original_price.toLocaleString("fa-IR")} تومان
                       </span>
                     )}
                     <span className="font-bold text-xl" style={{ color: theme.colors.primary }}>

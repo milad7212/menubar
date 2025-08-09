@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -7,16 +8,33 @@ import { Save } from "lucide-react"
 import { useCafe } from "@/context/CafeContext"
 
 export function InfoTab() {
-  const { cafeData, setCafeData } = useCafe()
+  const { cafeData, updateCafeInfo } = useCafe()
+  const [info, setInfo] = useState(cafeData?.info)
+  const [isSaving, setIsSaving] = useState(false)
+
+  useEffect(() => {
+    setInfo(cafeData?.info)
+  }, [cafeData])
 
   const handleInputChange = (field: string, value: string) => {
-    setCafeData({ ...cafeData, info: { ...cafeData.info, [field]: value } })
+    setInfo((prev) => (prev ? { ...prev, [field]: value } : null))
   }
 
-  const handleSaveMenu = () => {
-    // In a real app, this would save to a backend.
-    // For now, we can show a toast notification.
-    alert("اطلاعات با موفقیت ذخیره شد!")
+  const handleSaveChanges = async () => {
+    if (!info) return
+    setIsSaving(true)
+    try {
+      await updateCafeInfo(info)
+      alert("اطلاعات با موفقیت ذخیره شد!")
+    } catch (error: any) {
+      alert(`خطا در ذخیره اطلاعات: ${error.message}`)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  if (!info) {
+    return <div>اطلاعات کافه در حال بارگذاری است...</div>
   }
 
   return (
@@ -27,21 +45,36 @@ export function InfoTab() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2 text-right md:order-last">
+          <div className="space-y-2 text-right">
             <Label htmlFor="cafe-name">نام کافه *</Label>
             <Input
               id="cafe-name"
-              value={cafeData.info.name}
-              onChange={(e) => handleInputChange("name", e.target.value)}
+              value={info.cafe_name || ""}
+              onChange={(e) => handleInputChange("cafe_name", e.target.value)}
               placeholder="نام کافه شما"
               className="text-right"
             />
           </div>
           <div className="space-y-2 text-right">
-            <Label htmlFor="cafe-phone">شماره تماس</Label>
+            <Label htmlFor="cafe-slug">آدرس صفحه منو (Slug) *</Label>
+            <Input
+              id="cafe-slug"
+              value={info.slug || ""}
+              onChange={(e) => handleInputChange("slug", e.target.value.toLowerCase().replace(/\s+/g, '-'))}
+              placeholder="your-cafe-name"
+              className="text-left"
+              dir="ltr"
+            />
+             <p className="text-xs text-muted-foreground text-right">فقط حروف انگلیسی کوچک، اعداد و خط تیره (-)</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2 text-right md:order-last">
+             <Label htmlFor="cafe-phone">شماره تماس</Label>
             <Input
               id="cafe-phone"
-              value={cafeData.info.phone}
+              value={info.phone || ""}
               onChange={(e) => handleInputChange("phone", e.target.value)}
               placeholder="۰۲۱-۱۲۳۴۵۶۷۸"
               className="text-right"
@@ -53,7 +86,7 @@ export function InfoTab() {
           <Label htmlFor="cafe-description">توضیحات کافه</Label>
           <Textarea
             id="cafe-description"
-            value={cafeData.info.description}
+            value={info.description || ""}
             onChange={(e) => handleInputChange("description", e.target.value)}
             placeholder="توضیح کوتاهی از کافه شما"
             rows={3}
@@ -65,7 +98,7 @@ export function InfoTab() {
           <Label htmlFor="cafe-address">آدرس کافه</Label>
           <Input
             id="cafe-address"
-            value={cafeData.info.address}
+            value={info.address || ""}
             onChange={(e) => handleInputChange("address", e.target.value)}
             placeholder="آدرس کامل کافه"
             className="text-right"
@@ -76,17 +109,17 @@ export function InfoTab() {
           <Label htmlFor="cafe-logo">لوگوی کافه (لینک تصویر)</Label>
           <Input
             id="cafe-logo"
-            value={cafeData.info.logo}
-            onChange={(e) => handleInputChange("logo", e.target.value)}
+            value={info.logo_url || ""}
+            onChange={(e) => handleInputChange("logo_url", e.target.value)}
             placeholder="https://example.com/logo.png"
             dir="ltr"
           />
         </div>
       </CardContent>
       <CardFooter className="px-6 pb-6">
-        <Button onClick={handleSaveMenu}>
+        <Button onClick={handleSaveChanges} disabled={isSaving}>
           <Save className="h-4 w-4 ml-2" />
-          تأیید و ذخیره اطلاعات
+          {isSaving ? "در حال ذخیره..." : "تأیید و ذخیره اطلاعات"}
         </Button>
       </CardFooter>
     </Card>

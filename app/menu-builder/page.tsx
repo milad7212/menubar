@@ -21,18 +21,55 @@ import { PreviewMode } from "@/components/menu-builder/PreviewMode"
 import { useCafe } from "@/context/CafeContext"
 import { customerThemes } from "@/lib/themes"
 import { MenuManager } from "@/components/menu-builder/MenuManager"
+import { createClient } from "@/lib/supabase/client"
+import { useRouter } from "next/navigation"
+import { LogOut } from "lucide-react"
 
 export default function MenuBuilderPage() {
-  const { cafeData } = useCafe()
+  const { cafeData, isLoading, error } = useCafe()
   const [activeTab, setActiveTab] = useState("info")
   const [previewMode, setPreviewMode] = useState(false)
+  const router = useRouter()
+  const supabase = createClient()
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push("/login")
+  }
 
   // Mock handlers - these would interact with a backend in a real app
   const handleSaveMenu = () => alert("منو با موفقیت ذخیره شد!")
   const handlePublishMenu = () => alert("منو با موفقیت منتشر شد!")
 
+  useEffect(() => {
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) {
+        router.push("/login")
+      }
+    }
+    checkUser()
+  }, [router, supabase.auth])
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-screen">در حال بارگذاری داده‌های کافه...</div>
+  }
+
+  if (error) {
+    return <div className="flex justify-center items-center h-screen text-red-500">خطا در بارگذاری داده‌ها: {error.message}</div>
+  }
+
   if (!cafeData) {
-    return <div>در حال بارگذاری...</div>
+    // This can happen if the user is authenticated but has no profile data yet,
+    // or if the data is just not there.
+    return (
+      <div className="flex justify-center items-center h-screen">
+        اطلاعات کافه یافت نشد. لطفاً دوباره وارد شوید.
+        <Button onClick={handleLogout} className="mr-4">خروج</Button>
+      </div>
+    )
   }
 
   if (previewMode) {
@@ -86,6 +123,10 @@ export default function MenuBuilderPage() {
                 className="bg-gradient-to-r from-green-500 to-emerald-600 text-xs"
               >
                 انتشار
+              </Button>
+              <Button onClick={handleLogout} variant="outline" size="sm" className="text-xs">
+                <LogOut className="h-4 w-4 sm:ml-2" />
+                <span className="hidden sm:inline">خروج</span>
               </Button>
               <Link href="/">
                 <Button variant="ghost" size="icon" className="w-8 h-8">

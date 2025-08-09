@@ -24,41 +24,59 @@ import { Label } from "@/components/ui/label";
 import { Plus, Edit, Trash2 } from "lucide-react";
 
 export function MenuManager() {
-  const {
-    cafeData,
-    activeMenuId,
-    setActiveMenuId,
-    addMenu,
-    updateMenu,
-    deleteMenu,
-  } = useCafe();
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [newMenuName, setNewMenuName] = useState("");
-  const [editingMenu, setEditingMenu] = useState(null);
+  const { cafeData, activeMenuId, setActiveMenuId, addMenu, updateMenu, deleteMenu } = useCafe()
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [newMenuName, setNewMenuName] = useState("")
+  const [editingMenu, setEditingMenu] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleAddMenu = () => {
-    if (newMenuName.trim()) {
-      addMenu(newMenuName.trim());
-      setNewMenuName("");
-      setIsAddDialogOpen(false);
+  const handleAddMenu = async () => {
+    if (!newMenuName.trim()) return
+    setIsLoading(true)
+    try {
+      await addMenu(newMenuName.trim())
+      setNewMenuName("")
+      setIsAddDialogOpen(false)
+    } catch (error) {
+      alert("خطا در افزودن منو")
+    } finally {
+      setIsLoading(false)
     }
   };
 
-  const handleUpdateMenu = () => {
-    if (editingMenu && editingMenu.name.trim()) {
-      updateMenu(editingMenu.id, editingMenu.name.trim());
-      setEditingMenu(null);
-      setIsEditDialogOpen(false);
+  const handleUpdateMenu = async () => {
+    if (!editingMenu || !editingMenu.name.trim()) return
+    setIsLoading(true)
+    try {
+      await updateMenu(editingMenu.id, editingMenu.name.trim())
+      setEditingMenu(null)
+      setIsEditDialogOpen(false)
+    } catch (error) {
+      alert("خطا در به‌روزرسانی منو")
+    } finally {
+      setIsLoading(false)
     }
   };
 
-  const openEditDialog = (menu) => {
-    setEditingMenu(menu);
-    setIsEditDialogOpen(true);
-  };
+  const handleDeleteMenu = async () => {
+    if (!activeMenuId || !confirm(`آیا از حذف منوی «${activeMenu?.name}» مطمئن هستید؟`)) return
+    setIsLoading(true)
+    try {
+      await deleteMenu(activeMenuId)
+    } catch (error) {
+       alert("خطا در حذف منو")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-  const activeMenu = cafeData.menus.find((m) => m.id === activeMenuId);
+  const openEditDialog = (menu: any) => {
+    setEditingMenu(menu)
+    setIsEditDialogOpen(true)
+  }
+
+  const activeMenu = cafeData?.menus.find((m) => m.id === activeMenuId)
 
   return (
     <div className="p-4 bg-gray-100 rounded-lg flex items-center justify-between gap-4">
@@ -70,15 +88,14 @@ export function MenuManager() {
           منوی فعال:
         </Label>
         <Select
-          dir="rtl"
-          value={activeMenuId?.toString()}
-          onValueChange={(val) => setActiveMenuId(Number(val))}
+          value={activeMenuId?.toString() || ""}
+          onValueChange={(val) => setActiveMenuId(val ? Number(val) : null)}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="یک منو انتخاب کنید" />
           </SelectTrigger>
           <SelectContent>
-            {cafeData.menus.map((menu) => (
+            {cafeData?.menus.map((menu) => (
               <SelectItem key={menu.id} value={menu.id.toString()}>
                 {menu.name}
               </SelectItem>
@@ -94,7 +111,7 @@ export function MenuManager() {
           onOpenChange={setIsAddDialogOpen}
         >
           <DialogTrigger asChild>
-            <Button size="sm">
+            <Button size="sm" disabled={isLoading}>
               <Plus className="h-4 w-4 ml-2" />
               منوی جدید
             </Button>
@@ -116,25 +133,23 @@ export function MenuManager() {
               />
             </div>
             <DialogFooter>
-              <Button onClick={handleAddMenu}>ایجاد</Button>
+              <Button onClick={handleAddMenu} disabled={isLoading}>
+                {isLoading ? "در حال ایجاد..." : "ایجاد"}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
 
         {activeMenu && (
           <>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => openEditDialog(activeMenu)}
-            >
+            <Button variant="outline" size="sm" onClick={() => openEditDialog(activeMenu)} disabled={isLoading}>
               <Edit className="h-4 w-4" />
             </Button>
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => deleteMenu(activeMenuId)}
-              disabled={cafeData.menus.length <= 1}
+              onClick={handleDeleteMenu}
+              disabled={isLoading || (cafeData?.menus.length ?? 0) <= 1}
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -158,7 +173,9 @@ export function MenuManager() {
             />
           </div>
           <DialogFooter>
-            <Button onClick={handleUpdateMenu}>ذخیره</Button>
+            <Button onClick={handleUpdateMenu} disabled={isLoading}>
+              {isLoading ? "در حال ذخیره..." : "ذخیره"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

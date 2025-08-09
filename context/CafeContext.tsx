@@ -1,18 +1,22 @@
 "use client"
 
-import React, { createContext, useState, useContext, ReactNode } from "react"
+import React, { createContext, useState, useContext, ReactNode, useEffect } from "react"
+import { createClient } from "@/lib/supabase/client"
+import { User } from "@supabase/supabase-js"
 
 // Define types for our data structure
+// These types now reflect the database schema more closely
 interface Item {
   id: number
+  category_id: number
   name: string
   description: string
   price: number
-  originalPrice?: number
-  image?: string
-  isAvailable: boolean
-  isPopular: boolean
-  preparationTime?: string
+  original_price?: number
+  image_url?: string
+  is_available: boolean
+  is_popular: boolean
+  preparation_time?: string
   calories?: number
   ingredients?: string[]
   order: number
@@ -20,11 +24,12 @@ interface Item {
 
 interface Category {
   id: number
+  menu_id: number
   name: string
   description: string
   icon: string
   order: number
-  isVisible: boolean
+  is_visible: boolean
   items: Item[]
 }
 
@@ -36,278 +41,229 @@ interface TimeSlot {
 
 interface Menu {
   id: number
+  profile_id: string
   name: string
-  timeSlots: TimeSlot[]
+  time_slots: TimeSlot[]
   categories: Category[]
 }
 
 interface CafeInfo {
-  name: string
+  id: string // User ID
+  slug: string
+  cafe_name: string
   description: string
   address: string
   phone: string
-  logo: string
-  selectedTheme: string
+  logo_url: string
+  selected_theme: string
 }
 
 interface CafeData {
-  info: CafeInfo
+  info: CafeInfo | null
   menus: Menu[]
 }
 
 interface CafeContextType {
-  cafeData: CafeData
-  setCafeData: React.Dispatch<React.SetStateAction<CafeData>>
+  cafeData: CafeData | null
+  isLoading: boolean
+  error: Error | null
   activeMenuId: number | null
-  setActiveMenuId: (id: number) => void
-  addMenu: (name: string) => void
-  updateMenu: (id: number, name: string) => void
-  deleteMenu: (id: number) => void
-  addCategory: (menuId: number, category: Omit<Category, "id" | "items" | "order" | "isVisible">) => void
-  updateCategory: (menuId: number, category: Omit<Category, "items">) => void
-  deleteCategory: (menuId: number, categoryId: number) => void
-  addItem: (menuId: number, categoryId: number, item: Omit<Item, "id" | "order">) => void
-  updateItem: (menuId: number, categoryId: number, item: Item) => void
-  deleteItem: (menuId: number, categoryId: number, itemId: number) => void
+  setActiveMenuId: (id: number | null) => void
+  addMenu: (name: string) => Promise<void>
+  updateMenu: (id: number, name: string) => Promise<void>
+  deleteMenu: (id: number) => Promise<void>
+  addCategory: (menuId: number, category: Omit<Category, "id" | "items" | "order" | "is_visible" | "menu_id">) => Promise<void>
+  updateCategory: (menuId: number, category: Omit<Category, "items">) => Promise<void>
+  deleteCategory: (menuId: number, categoryId: number) => Promise<void>
+  addItem: (menuId: number, categoryId: number, item: Omit<Item, "id" | "order" | "category_id">) => Promise<void>
+  updateItem: (menuId: number, categoryId: number, item: Item) => Promise<void>
+  deleteItem: (menuId: number, categoryId: number, itemId: number) => Promise<void>
+  updateCafeInfo: (info: Omit<CafeInfo, "id">) => Promise<void>
 }
 
 // Create the context
 const CafeContext = createContext<CafeContextType | undefined>(undefined)
 
-// Initial data
-const initialCafeData: CafeData = {
-  info: {
-    name: "کافه من",
-    description: "بهترین قهوه و غذاهای خوشمزه",
-    address: "آدرس کافه شما",
-    phone: "شماره تماس",
-    logo: "",
-    selectedTheme: "modern",
-  },
-  menus: [
-    {
-      id: 1,
-      name: "منوی اصلی",
-      timeSlots: [{ day: "all", from: "08:00", to: "23:00" }],
-      categories: [
-        {
-          id: 101,
-          name: "نوشیدنی‌های گرم",
-          description: "قهوه‌ها و نوشیدنی‌های گرم",
-          icon: "☕",
-          order: 1,
-          isVisible: true,
-          items: [
-            {
-              id: 1001,
-              name: "اسپرسو",
-              description: "قهوه خالص و قوی",
-              price: 45000,
-              originalPrice: 0,
-              image: "/images/espresso.jpg",
-              isAvailable: true,
-              isPopular: false,
-              preparationTime: "۲-۳ دقیقه",
-              calories: 5,
-              ingredients: ["قهوه آرابیکا", "آب خالص"],
-              order: 1,
-            },
-            {
-              id: 1002,
-              name: "کاپوچینو",
-              description: "اسپرسو با شیر بخار داده شده و فوم شیر",
-              price: 60000,
-              isAvailable: true,
-              isPopular: true,
-              image: "/images/cappuccino.jpg",
-              preparationTime: "۳-۵ دقیقه",
-              calories: 120,
-              ingredients: ["اسپرسو", "شیر", "فوم شیر"],
-              order: 2,
-            },
-          ],
-        },
-        {
-          id: 102,
-          name: "نوشیدنی‌های سرد",
-          description: "نوشیدنی‌های خنک و منعش",
-          icon: "🧊",
-          order: 2,
-          isVisible: true,
-          items: [
-            {
-              id: 2001,
-              name: "آیس کافی",
-              description: "قهوه سرد با یخ",
-              price: 55000,
-              isAvailable: true,
-              isPopular: true,
-              image: "/images/ice-coffee.jpg",
-              preparationTime: "۳-۴ دقیقه",
-              calories: 150,
-              ingredients: ["قهوه", "یخ", "شیر"],
-              order: 1,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "منوی صبحانه",
-      timeSlots: [{ day: "all", from: "08:00", to: "12:00" }],
-      categories: [],
-    },
-  ],
-}
-
 // Create the provider component
 export const CafeProvider = ({ children }: { children: ReactNode }) => {
-  const [cafeData, setCafeData] = useState<CafeData>(initialCafeData)
-  const [activeMenuId, setActiveMenuId] = useState<number | null>(
-    initialCafeData.menus.length > 0 ? initialCafeData.menus[0].id : null
-  )
+  const supabase = createClient()
+  const [user, setUser] = useState<User | null>(null)
+  const [cafeData, setCafeData] = useState<CafeData | null>(null)
+  const [activeMenuId, setActiveMenuId] = useState<number | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
 
-  // Menu functions
-  const addMenu = (name: string) => {
-    setCafeData((prev) => {
-      const newMenu: Menu = {
-        id: Date.now(),
-        name,
-        timeSlots: [{ day: "all", from: "08:00", to: "23:00" }],
-        categories: [],
-      }
-      return { ...prev, menus: [...prev.menus, newMenu] }
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null)
     })
-  }
 
-  const updateMenu = (id: number, name: string) => {
-    setCafeData((prev) => ({
-      ...prev,
-      menus: prev.menus.map((menu) => (menu.id === id ? { ...menu, name } : menu)),
-    }))
-  }
-
-  const deleteMenu = (id: number) => {
-    setCafeData((prev) => ({
-      ...prev,
-      menus: prev.menus.filter((menu) => menu.id !== id),
-    }))
-    if (activeMenuId === id) {
-      setActiveMenuId(cafeData.menus.length > 1 ? cafeData.menus.filter((menu) => menu.id !== id)[0].id : null)
+    return () => {
+      authListener.subscription.unsubscribe()
     }
+  }, [supabase.auth])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) {
+        setIsLoading(false)
+        setCafeData(null)
+        return
+      }
+
+      setIsLoading(true)
+      setError(null)
+
+      try {
+        // 1. Fetch profile info
+        const { data: profileInfo, error: profileError } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .single()
+        if (profileError) throw profileError
+
+        // 2. Fetch menus for the user
+        const { data: menus, error: menusError } = await supabase
+          .from("menus")
+          .select("*")
+          .eq("profile_id", user.id)
+        if (menusError) throw menusError
+
+        // 3. Fetch categories and items for each menu
+        const menusWithDetails = await Promise.all(
+          menus.map(async (menu) => {
+            const { data: categories, error: categoriesError } = await supabase
+              .from("categories")
+              .select("*, items(*)")
+              .eq("menu_id", menu.id)
+              .order("order", { foreignTable: "items", ascending: true })
+              .order("order", { ascending: true })
+            if (categoriesError) throw categoriesError
+
+            // Supabase returns items nested inside categories, which matches our structure
+            return { ...menu, categories: categories || [] }
+          })
+        )
+
+        setCafeData({
+          info: profileInfo,
+          menus: menusWithDetails,
+        })
+
+        if (menusWithDetails.length > 0 && !activeMenuId) {
+          setActiveMenuId(menusWithDetails[0].id)
+        }
+      } catch (e: any) {
+        setError(e)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [user, activeMenuId, supabase])
+
+  const revalidateData = async () => {
+    // This is a simplified revalidation. In a real app, you might want
+    // more granular updates instead of a full refetch.
+    if (!user) return
+    // ... (implementation of fetchData from before)
   }
 
-  // Category functions
-  const addCategory = (menuId: number, category: Omit<Category, "id" | "items" | "order" | "isVisible">) => {
-    setCafeData((prev) => ({
-      ...prev,
-      menus: prev.menus.map((menu) =>
-        menu.id === menuId
-          ? {
-              ...menu,
-              categories: [
-                ...menu.categories,
-                {
-                  ...category,
-                  id: Date.now(),
-                  items: [],
-                  order: menu.categories.length + 1,
-                  isVisible: true,
-                },
-              ],
-            }
-          : menu
-      ),
-    }))
+  const updateCafeInfo = async (info: Omit<CafeInfo, "id">) => {
+    if (!user) throw new Error("User not authenticated")
+    const { data, error } = await supabase
+      .from("profiles")
+      .update({
+        slug: info.slug,
+        cafe_name: info.cafe_name,
+        description: info.description,
+        address: info.address,
+        phone: info.phone,
+        logo_url: info.logo_url,
+        selected_theme: info.selected_theme,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", user.id)
+      .single()
+
+    if (error) {
+      if (error.code === '23505') { // Unique constraint violation
+        throw new Error("این نامک (slug) قبلاً استفاده شده است. لطفاً نام دیگری انتخاب کنید.")
+      }
+      throw error
+    }
+    // Locally update state for immediate feedback
+    setCafeData((prev) => (prev ? { ...prev, info: { ...prev.info, ...info, id: user.id } } : null))
   }
 
-  const updateCategory = (menuId: number, updatedCategory: Omit<Category, "items">) => {
-    setCafeData((prev) => ({
-      ...prev,
-      menus: prev.menus.map((menu) =>
-        menu.id === menuId
-          ? {
-              ...menu,
-              categories: menu.categories.map((cat) =>
-                cat.id === updatedCategory.id ? { ...cat, ...updatedCategory } : cat
-              ),
-            }
-          : menu
-      ),
-    }))
+  const addMenu = async (name: string) => {
+    if (!user) throw new Error("User not authenticated")
+    const { data, error } = await supabase
+      .from("menus")
+      .insert({ name, profile_id: user.id })
+      .select()
+      .single()
+    if (error) throw error
+    setCafeData((prev) => (prev ? { ...prev, menus: [...prev.menus, { ...data, categories: [] }] } : null))
   }
 
-  const deleteCategory = (menuId: number, categoryId: number) => {
-    setCafeData((prev) => ({
-      ...prev,
-      menus: prev.menus.map((menu) =>
-        menu.id === menuId
-          ? { ...menu, categories: menu.categories.filter((cat) => cat.id !== categoryId) }
-          : menu
-      ),
-    }))
+  const updateMenu = async (id: number, name: string) => {
+    const { data, error } = await supabase.from("menus").update({ name }).eq("id", id)
+    if (error) throw error
+    setCafeData((prev) => prev ? { ...prev, menus: prev.menus.map(m => m.id === id ? {...m, name} : m) } : null)
   }
 
-  // Item functions
-  const addItem = (menuId: number, categoryId: number, item: Omit<Item, "id" | "order">) => {
-    setCafeData((prev) => ({
-      ...prev,
-      menus: prev.menus.map((menu) =>
-        menu.id === menuId
-          ? {
-              ...menu,
-              categories: menu.categories.map((cat) =>
-                cat.id === categoryId
-                  ? {
-                      ...cat,
-                      items: [...cat.items, { ...item, id: Date.now(), order: cat.items.length + 1 }],
-                    }
-                  : cat
-              ),
-            }
-          : menu
-      ),
-    }))
+  const deleteMenu = async (id: number) => {
+    const { error } = await supabase.from("menus").delete().eq("id", id)
+    if (error) throw error
+    setCafeData((prev) => prev ? { ...prev, menus: prev.menus.filter(m => m.id !== id) } : null)
+    setActiveMenuId(null)
   }
 
-  const updateItem = (menuId: number, categoryId: number, updatedItem: Item) => {
-    setCafeData((prev) => ({
-      ...prev,
-      menus: prev.menus.map((menu) =>
-        menu.id === menuId
-          ? {
-              ...menu,
-              categories: menu.categories.map((cat) =>
-                cat.id === categoryId
-                  ? { ...cat, items: cat.items.map((item) => (item.id === updatedItem.id ? updatedItem : item)) }
-                  : cat
-              ),
-            }
-          : menu
-      ),
-    }))
+  const addCategory = async (menuId: number, category: Omit<Category, "id" | "items" | "order" | "is_visible" | "menu_id">) => {
+    const { data, error } = await supabase.from("categories").insert({ ...category, menu_id: menuId }).select().single()
+    if (error) throw error
+    setCafeData(prev => prev ? { ...prev, menus: prev.menus.map(m => m.id === menuId ? {...m, categories: [...m.categories, {...data, items: []}]} : m) } : null)
   }
 
-  const deleteItem = (menuId: number, categoryId: number, itemId: number) => {
-    setCafeData((prev) => ({
-      ...prev,
-      menus: prev.menus.map((menu) =>
-        menu.id === menuId
-          ? {
-              ...menu,
-              categories: menu.categories.map((cat) =>
-                cat.id === categoryId ? { ...cat, items: cat.items.filter((item) => item.id !== itemId) } : cat
-              ),
-            }
-          : menu
-      ),
-    }))
+  const updateCategory = async (menuId: number, category: Omit<Category, "items">) => {
+    const { id, ...updateData } = category
+    const { data, error } = await supabase.from("categories").update(updateData).eq("id", id)
+    if (error) throw error
+    setCafeData(prev => prev ? { ...prev, menus: prev.menus.map(m => m.id === menuId ? {...m, categories: m.categories.map(c => c.id === id ? {...c, ...category} : c)} : m) } : null)
+  }
+
+  const deleteCategory = async (menuId: number, categoryId: number) => {
+    const { error } = await supabase.from("categories").delete().eq("id", categoryId)
+    if (error) throw error
+    setCafeData(prev => prev ? { ...prev, menus: prev.menus.map(m => m.id === menuId ? {...m, categories: m.categories.filter(c => c.id !== categoryId)} : m) } : null)
+  }
+
+  const addItem = async (menuId: number, categoryId: number, item: Omit<Item, "id" | "order" | "category_id">) => {
+    const { data, error } = await supabase.from("items").insert({ ...item, category_id: categoryId }).select().single()
+    if (error) throw error
+    setCafeData(prev => prev ? { ...prev, menus: prev.menus.map(m => m.id === menuId ? {...m, categories: m.categories.map(c => c.id === categoryId ? {...c, items: [...c.items, data]} : c)} : m) } : null)
+  }
+
+  const updateItem = async (menuId: number, categoryId: number, item: Item) => {
+    const { id, ...updateData } = item
+    const { data, error } = await supabase.from("items").update(updateData).eq("id", id)
+    if (error) throw error
+    setCafeData(prev => prev ? { ...prev, menus: prev.menus.map(m => m.id === menuId ? {...m, categories: m.categories.map(c => c.id === categoryId ? {...c, items: c.items.map(i => i.id === id ? {...i, ...item} : i)} : c)} : m) } : null)
+  }
+
+  const deleteItem = async (menuId: number, categoryId: number, itemId: number) => {
+    const { error } = await supabase.from("items").delete().eq("id", itemId)
+    if (error) throw error
+    setCafeData(prev => prev ? { ...prev, menus: prev.menus.map(m => m.id === menuId ? {...m, categories: m.categories.map(c => c.id === categoryId ? {...c, items: c.items.filter(i => i.id !== itemId)} : c)} : m) } : null)
   }
 
   const contextValue: CafeContextType = {
     cafeData,
-    setCafeData,
+    isLoading,
+    error,
     activeMenuId,
     setActiveMenuId,
     addMenu,
@@ -319,6 +275,7 @@ export const CafeProvider = ({ children }: { children: ReactNode }) => {
     addItem,
     updateItem,
     deleteItem,
+    updateCafeInfo,
   }
 
   return <CafeContext.Provider value={contextValue}>{children}</CafeContext.Provider>
